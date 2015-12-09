@@ -11,7 +11,9 @@ const RepoMenuItem = new Lang.Class({
 
   _init: function (repo) {
     this.repo = repo;
-    this.parent(repo.name, false);
+    this.parent(repo.name, true);
+    this.icon.icon_name = 'repo';
+    // this.status.text = "The text on the right side";
     this._initMenu();
   },
 
