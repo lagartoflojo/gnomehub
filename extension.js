@@ -13,14 +13,14 @@ const RepoMenuItem = Extension.imports.repoMenuItem.RepoMenuItem;
 
 const Icon = 'octoface';
 
-let github = new GithubFetcher();
-
 const GithubProjects = new Lang.Class({
   Name: 'GithubProjects.GithubProjects',
   Extends: PanelMenu.Button,
+  _github: null,
 
   _init: function () {
     this.parent(0.0, "Github Projects", false);
+    this._github = new GithubFetcher();
 
     let icon = new St.Icon({
       icon_name: Icon,
@@ -34,9 +34,7 @@ const GithubProjects = new Lang.Class({
   },
 
   _initMenu: function () {
-    let addRepoMenuItem = new PopupMenu.PopupMenuItem("Add repository", {
-      reactive: true
-    });
+    let addRepoMenuItem = new PopupMenu.PopupMenuItem("Add repository");
     addRepoMenuItem.actor.connect('button-press-event', Lang.bind(this, this._showAddRepoDialog));
     this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
     this.menu.addMenuItem(addRepoMenuItem);
@@ -44,11 +42,12 @@ const GithubProjects = new Lang.Class({
 
   _startGithubSync: function () {
     var self = this;
-    let prs = github.getRepos();
 
-    prs.forEach(function (pr) {
-      self.menu.addMenuItem(new RepoMenuItem(pr), 0);
+    this._github.getRepos(function (repo) {
+      log(JSON.stringify(repo));
+      self.menu.addMenuItem(new RepoMenuItem(repo), 0);
     });
+
   },
 
   _showAddRepoDialog: function () {
@@ -56,6 +55,14 @@ const GithubProjects = new Lang.Class({
       log(newRepo);
     }));
     dialog.open(null);
+  },
+
+  destroy: function () {
+    if(this._github) {
+      this._github.close();
+      this._github = null;
+    }
+    this.parent();
   }
 });
 
