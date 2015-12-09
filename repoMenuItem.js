@@ -18,6 +18,7 @@ const RepoMenuItem = new Lang.Class({
   _initMenu: function () {
     var self = this;
 
+    // Open repo in browser
     let openRepoMenuItem = new PopupMenuItem("Open repo in browser", {
       reactive: true
     });
@@ -26,12 +27,16 @@ const RepoMenuItem = new Lang.Class({
     });
     this.menu.addMenuItem(openRepoMenuItem);
 
+    //  Pull requests
     this.repo.pullRequests.forEach(function (pr) {
       let prMenuItem = new PopupMenuItem(pr.title, {
         reactive: true
       });
       prMenuItem.actor.connect('button-press-event', function () {
-        Util.spawnApp(['xdg-open', 'https://github.com/' + self.repo.name + '/pull/' + pr.number]);
+        Util.spawnApp([
+          'xdg-open',
+          'https://github.com/' + self.repo.name + '/pull/' + pr.number
+        ]);
       });
       self.menu.addMenuItem(prMenuItem);
     });

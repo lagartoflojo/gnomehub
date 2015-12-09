@@ -13,12 +13,11 @@ const RepoMenuItem = Extension.imports.repoMenuItem.RepoMenuItem;
 
 const Icon = 'octoface';
 
-let gf = new GithubFetcher();
+let github = new GithubFetcher();
 
 const GithubProjects = new Lang.Class({
   Name: 'GithubProjects.GithubProjects',
   Extends: PanelMenu.Button,
-  text: gf.text,
 
   _init: function () {
     this.parent(0.0, "Github Projects", false);
@@ -30,47 +29,26 @@ const GithubProjects = new Lang.Class({
 
     this.actor.add_actor(icon);
 
-    let repo = {
-      name: 'SUSE/happy-customer',
-      pullRequests: [
-        {
-          number: 2461,
-          title: "add more syslog objects for easy access to object history..."
-        },
-        {
-          number: 2465,
-          title: "Update Sprint25 scrum data 2905"
-        },
-        {
-          number: 2466,
-          title: "Fix bug when user has no orgs with support, or all orgs with..."
-        }
-      ]
-    };
-    let rails = {
-      name: 'rails/rails',
-      pullRequests: [
-        {
-          number: 22534,
-          title: "ActionMailer: support overriding template name in multipart"
-        },
-        {
-          number: 22526,
-          title: "WIP: Add methods for querying exactly one record from a relation"
-        }
-      ]
-    }
+    this._initMenu();
+    this._startGithubSync();
+  },
 
-    this.menu.addMenuItem(new RepoMenuItem(repo));
-    this.menu.addMenuItem(new RepoMenuItem(rails));
-
-    // Add repo menu item
-    this._addRepoMenuItem = new PopupMenu.PopupMenuItem("Add repository", {
+  _initMenu: function () {
+    let addRepoMenuItem = new PopupMenu.PopupMenuItem("Add repository", {
       reactive: true
     });
-    this._addRepoMenuItem.actor.connect('button-press-event', Lang.bind(this, this._showAddRepoDialog));
+    addRepoMenuItem.actor.connect('button-press-event', Lang.bind(this, this._showAddRepoDialog));
     this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-    this.menu.addMenuItem(this._addRepoMenuItem);
+    this.menu.addMenuItem(addRepoMenuItem);
+  },
+
+  _startGithubSync: function () {
+    var self = this;
+    let prs = github.getRepos();
+
+    prs.forEach(function (pr) {
+      self.menu.addMenuItem(new RepoMenuItem(pr), 0);
+    });
   },
 
   _showAddRepoDialog: function () {
