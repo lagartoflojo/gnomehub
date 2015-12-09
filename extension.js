@@ -11,6 +11,8 @@ const GithubFetcher = Extension.imports.githubFetcher.GithubFetcher;
 const AddRepoDialog = Extension.imports.addRepoDialog.AddRepoDialog;
 const RepoMenuItem = Extension.imports.repoMenuItem.RepoMenuItem;
 
+const Icon = 'octoface';
+
 let gf = new GithubFetcher();
 
 const GithubProjects = new Lang.Class({
@@ -22,7 +24,7 @@ const GithubProjects = new Lang.Class({
     this.parent(0.0, "Github Projects", false);
 
     let icon = new St.Icon({
-      icon_name: 'system-run-symbolic',
+      icon_name: Icon,
       style_class: 'system-status-icon'
     });
 
@@ -81,7 +83,9 @@ const GithubProjects = new Lang.Class({
 
 let _githubProjects;
 
-function init() {
+function init(extensionMeta) {
+  let theme = imports.gi.Gtk.IconTheme.get_default();
+  theme.append_search_path(extensionMeta.path + "/icons");
 }
 
 function enable() {
