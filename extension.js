@@ -1,4 +1,3 @@
-
 const St = imports.gi.St;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
@@ -10,6 +9,7 @@ const Util = imports.misc.util;
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const GithubFetcher = Extension.imports.githubFetcher.GithubFetcher;
 const AddRepoDialog = Extension.imports.addRepoDialog.AddRepoDialog;
+const RepoMenuItem = Extension.imports.repoMenuItem.RepoMenuItem;
 
 let gf = new GithubFetcher();
 
@@ -28,24 +28,39 @@ const GithubProjects = new Lang.Class({
 
     this.actor.add_actor(icon);
 
-    // Repo sub menu
-    this._repoSubMenu = new PopupSubMenuMenuItem('SUSE/happy-customer', false);
-    this._openRepoMenuItem = new PopupMenu.PopupMenuItem("Open repo in browser", {
-      reactive: true
-    });
-    this._openRepoMenuItem.actor.connect('button-press-event', function () {
-      Util.spawnApp(['xdg-open', 'https://github.com/SUSE/happy-customer']);
-    });
-    this._prMenuItem = new PopupMenu.PopupMenuItem("add more syslog objects for easy access to object history...", {
-      reactive: true
-    });
-    this._prMenuItem.actor.connect('button-press-event', function () {
-      Util.spawnApp(['xdg-open', 'https://github.com/SUSE/happy-customer/pull/2461']);
-    });
+    let repo = {
+      name: 'SUSE/happy-customer',
+      pullRequests: [
+        {
+          number: 2461,
+          title: "add more syslog objects for easy access to object history..."
+        },
+        {
+          number: 2465,
+          title: "Update Sprint25 scrum data 2905"
+        },
+        {
+          number: 2466,
+          title: "Fix bug when user has no orgs with support, or all orgs with..."
+        }
+      ]
+    };
+    let rails = {
+      name: 'rails/rails',
+      pullRequests: [
+        {
+          number: 22534,
+          title: "ActionMailer: support overriding template name in multipart"
+        },
+        {
+          number: 22526,
+          title: "WIP: Add methods for querying exactly one record from a relation"
+        }
+      ]
+    }
 
-    this._repoSubMenu.menu.addMenuItem(this._openRepoMenuItem);
-    this._repoSubMenu.menu.addMenuItem(this._prMenuItem);
-    this.menu.addMenuItem(this._repoSubMenu);
+    this.menu.addMenuItem(new RepoMenuItem(repo));
+    this.menu.addMenuItem(new RepoMenuItem(rails));
 
     // Add repo menu item
     this._addRepoMenuItem = new PopupMenu.PopupMenuItem("Add repository", {
