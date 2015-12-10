@@ -4,20 +4,33 @@ const Base64 = Extension.imports.base64.Base64;
 
 const API_URL = 'https://api.github.com';
 
-const GithubFetcher = function () {
+const GithubFetcher = function (options) {
   this.repoNames = ['rails/rails', 'emberjs/ember.js'];
   this._httpSession = new Soup.Session({user_agent: 'lagartoflojo'});
-  Soup.Session.prototype.add_feature.call(this._httpSession,
-    new Soup.ProxyResolverDefault());
+  this.options = options;
+
+  // Soup.Session.prototype.add_feature.call(this._httpSession,
+  //   new Soup.ProxyResolverDefault());
+  // this._httpSession.connect('authenticate', function () {
+  //   log('requires auth!');
+  // });
 
   this.loadJSON = function(path, cb) {
     let self = this;
 
     let message = Soup.Message.new('GET', API_URL + path);
+    this.authenticateMessage(message);
     this._httpSession.queue_message(message, function(session, message) {
       let data = message.response_body.data;
       cb.call(self, JSON.parse(data));
     });
+  };
+
+  this.authenticateMessage = function (message) {
+    if(this.options.username && this.options.password) {
+      let value = 'Basic ' + Base64.encode(this.options.username + ':' + this.options.password);
+      message.request_headers.append('Authorization', value);
+    }
   };
 
   this.getRepos = function (cb) {

@@ -2,6 +2,7 @@ const Lang = imports.lang;
 const Util = imports.misc.util;
 const Signals = imports.signals;
 const PopupMenuItem = imports.ui.popupMenu.PopupMenuItem;
+const PopupImageMenuItem = imports.ui.popupMenu.PopupImageMenuItem;
 const PopupSubMenuMenuItem = imports.ui.popupMenu.PopupSubMenuMenuItem;
 
 const RepoMenuItem = new Lang.Class({
@@ -21,9 +22,7 @@ const RepoMenuItem = new Lang.Class({
     var self = this;
 
     // Open repo in browser
-    let openRepoMenuItem = new PopupMenuItem("Open repo in browser", {
-      reactive: true
-    });
+    let openRepoMenuItem = new PopupMenuItem("Open repo in browser");
     openRepoMenuItem.actor.connect('button-press-event', function () {
       Util.spawnApp(['xdg-open', 'https://github.com/' + self.repo.name]);
     });
@@ -31,9 +30,10 @@ const RepoMenuItem = new Lang.Class({
 
     //  Pull requests
     this.repo.pullRequests.forEach(function (pr) {
-      let prMenuItem = new PopupMenuItem(pr.title, {
-        reactive: true
-      });
+      // emblem-ok-symbolic
+      // window-close-symbolic
+      // content-loading-symbolic
+      let prMenuItem = new PopupImageMenuItem(pr.title, 'emblem-ok-symbolic');
       prMenuItem.actor.connect('button-press-event', function () {
         Util.spawnApp([
           'xdg-open',

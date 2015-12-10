@@ -20,7 +20,10 @@ const GithubProjects = new Lang.Class({
 
   _init: function () {
     this.parent(0.0, "Github Projects", false);
-    this._github = new GithubFetcher();
+    this._github = new GithubFetcher({
+      username: 'lagartoflojo',
+      password: ''
+    });
 
     let icon = new St.Icon({
       icon_name: Icon,
