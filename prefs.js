@@ -113,7 +113,8 @@ const GithubProjectsPrefsWidget = new GObject.Class({
     this._repoTreeView = new Gtk.TreeView({
       model: this._repoStore,
       hexpand: true,
-      vexpand: true
+      vexpand: true,
+      headers_visible: false
     });
     this._repoTreeView.get_selection().set_mode(Gtk.SelectionMode.SINGLE);
 
@@ -135,13 +136,13 @@ const GithubProjectsPrefsWidget = new GObject.Class({
     toolbar.get_style_context().add_class(Gtk.STYLE_CLASS_INLINE_TOOLBAR);
 
     let addTButton = new Gtk.ToolButton({
-      stock_id: Gtk.STOCK_ADD
+      icon_name: Gtk.STOCK_ADD
     });
     addTButton.connect('clicked', Lang.bind(this, this._addRepo));
     toolbar.add(addTButton);
 
     let removeTButton = new Gtk.ToolButton({
-      stock_id: Gtk.STOCK_REMOVE
+      icon_name: Gtk.STOCK_REMOVE
     });
     removeTButton.connect('clicked', Lang.bind(this, this._removeRepo));
     toolbar.add(removeTButton);
