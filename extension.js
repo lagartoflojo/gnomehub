@@ -23,10 +23,13 @@ const GithubProjects = new Lang.Class({
   Name: 'GithubProjects.GithubProjects',
   Extends: PanelMenu.Button,
   _github: null,
+  _repoMenuItems: [],
 
   _init: function() {
     this.parent(0.0, "Github Projects", false);
     this._settings = Convenience.getSettings();
+    this._settings.connect('changed::'+SETTINGS_REPOSITORIES,
+      Lang.bind(this, this._updateRepos));
 
     this._github = new GithubFetcher({
       username: this._settings.get_string(SETTINGS_GITHUB_USERNAME),
@@ -52,12 +55,26 @@ const GithubProjects = new Lang.Class({
     this.menu.addMenuItem(addRepoMenuItem);
   },
 
+  _getRepos: function () {
+    return this._settings.get_strv(SETTINGS_REPOSITORIES);
+  },
+
+  _updateRepos: function () {
+    this._repoMenuItems.forEach(function (menuItem) {
+      menuItem.destroy();
+    });
+    this._repoMenuItems.splice(0);
+    this._startGithubSync();
+  },
+
   _startGithubSync: function() {
     var self = this;
 
-    this._github.getRepos(this._settings.get_strv(SETTINGS_REPOSITORIES),
+    this._github.getRepos(this._getRepos(),
       function(repo) {
-        self.menu.addMenuItem(new RepoMenuItem(repo), 0);
+        let menuItem = new RepoMenuItem(repo);
+        self._repoMenuItems.push(menuItem);
+        self.menu.addMenuItem(menuItem, 0);
       }
     );
 
