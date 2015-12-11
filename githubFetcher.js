@@ -47,8 +47,18 @@ const GithubFetcher = function(options) {
           let pr = {
             number: pullRequestData.number,
             title: pullRequestData.title,
-            url: pullRequestData.url
+            url: pullRequestData.url,
+            headSha: pullRequestData.head.sha,
+            status: null
           };
+
+          self.loadJSON('/repos/' + repoName + '/status/' + pr.headSha, function (statusData) {
+            // Only update the status if there are any checks in the PR
+            if(statusData.statuses.length) {
+              pr.status = statusData.state;
+            }
+          });
+
           repo.pullRequests.push(pr);
         });
 
