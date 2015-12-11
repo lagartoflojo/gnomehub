@@ -8,7 +8,6 @@ const Util = imports.misc.util;
 
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const GithubFetcher = Extension.imports.githubFetcher.GithubFetcher;
-const AddRepoDialog = Extension.imports.addRepoDialog.AddRepoDialog;
 const RepoMenuItem = Extension.imports.repoMenuItem.RepoMenuItem;
 const Convenience = Extension.imports.convenience;
 let metadata = Extension.metadata;
@@ -48,11 +47,11 @@ const GithubProjects = new Lang.Class({
   },
 
   _initMenu: function() {
-    let addRepoMenuItem = new PopupMenu.PopupMenuItem("Add repository");
-    addRepoMenuItem.actor.connect('button-press-event', Lang.bind(this,
-      this._showAddRepoDialog));
+    let showSettingsMenuItem = new PopupMenu.PopupMenuItem("Add repository");
+    showSettingsMenuItem.actor.connect('button-press-event', Lang.bind(this,
+      this._showSettings));
     this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-    this.menu.addMenuItem(addRepoMenuItem);
+    this.menu.addMenuItem(showSettingsMenuItem);
   },
 
   _getRepos: function () {
@@ -80,12 +79,8 @@ const GithubProjects = new Lang.Class({
 
   },
 
-  _showAddRepoDialog: function() {
+  _showSettings: function() {
     Util.spawn(["gnome-shell-extension-prefs", metadata.uuid]);
-    // let dialog = new AddRepoDialog(Lang.bind(this, function(newRepo) {
-    //   log(newRepo);
-    // }));
-    // dialog.open(null);
   },
 
   destroy: function() {
