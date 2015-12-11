@@ -55,9 +55,7 @@ const GithubProjects = new Lang.Class({
   _startGithubSync: function() {
     var self = this;
 
-    this._github.getRepos(['SUSE/happy-customer', 'rails/rails',
-        'emberjs/ember.js'
-      ],
+    this._github.getRepos(this._settings.get_strv(SETTINGS_REPOSITORIES),
       function(repo) {
         self.menu.addMenuItem(new RepoMenuItem(repo), 0);
       }
