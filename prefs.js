@@ -12,6 +12,7 @@ const Lang = imports.lang;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Extension = ExtensionUtils.getCurrentExtension();
 const Convenience = Extension.imports.convenience;
+const githubRegex = Extension.imports.githubRegex;
 
 const SETTINGS_GITHUB_USERNAME = 'github-username';
 const SETTINGS_GITHUB_PASSWORD = 'github-password';
@@ -82,7 +83,7 @@ const GithubProjectsPrefsWidget = new GObject.Class({
     });
     grid.add(usernameEntry);
 
-    this._settings.bind('github-username', usernameEntry, 'text',
+    this._settings.bind(SETTINGS_GITHUB_USERNAME, usernameEntry, 'text',
       Gio.SettingsBindFlags.DEFAULT);
 
     grid.add(new Gtk.Label({
@@ -99,7 +100,7 @@ const GithubProjectsPrefsWidget = new GObject.Class({
     passwordEntry.set_visibility(false);
     grid.add(passwordEntry);
 
-    this._settings.bind('github-password', passwordEntry, 'text',
+    this._settings.bind(SETTINGS_GITHUB_PASSWORD, passwordEntry, 'text',
       Gio.SettingsBindFlags.DEFAULT);
 
     return grid;
@@ -151,9 +152,69 @@ const GithubProjectsPrefsWidget = new GObject.Class({
   },
 
   _addRepo: function () {
-    let repos = this._getSettingsRepos();
-    repos.push('ohai');
-    this._setSettingsRepos(repos);
+    let dialog = new Gtk.Dialog({
+      title: "Add Github repository",
+      transient_for: this.get_toplevel(),
+      modal: true,
+      use_header_bar: true
+    });
+    dialog.add_button(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL);
+    dialog.add_button("Add", Gtk.ResponseType.OK);
+    dialog.set_default_response(Gtk.ResponseType.OK);
+
+    let addBtn = dialog.get_widget_for_response(Gtk.ResponseType.OK);
+    addBtn.set_sensitive(false);
+
+    let header = dialog.get_header_bar();
+    header.set_subtitle('Format: user/repo')
+
+    let entryGrid = new Gtk.Grid({
+      column_spacing: 5,
+      margin: 10
+    });
+    entryGrid.set_orientation(Gtk.Orientation.HORIZONTAL);
+
+    entryGrid.add(new Gtk.Label({
+      label: 'https://github.com/'
+    }));
+
+    let repoEntry = new Gtk.Entry({
+      width_chars: 30
+    });
+    entryGrid.add(repoEntry);
+
+    dialog.get_content_area().add(entryGrid);
+
+    repoEntry.connect('changed', Lang.bind(this, function (entry) {
+      if(githubRegex.matchRepo(entry.get_text())) {
+        addBtn.set_sensitive(true);
+      }
+      else {
+        addBtn.set_sensitive(false);
+      }
+    }));
+
+    let dialogResponseCb = function(dialog, id) {
+      if(id === Gtk.ResponseType.OK && addBtn.get_sensitive()) {
+        let repo = repoEntry.get_text();
+        let repos = this._getSettingsRepos();
+        repos.push(repo);
+        this._setSettingsRepos(repos);
+        dialog.destroy();
+      }
+      else if (id === Gtk.ResponseType.CANCEL){
+        dialog.destroy();
+      }
+    }
+
+    repoEntry.connect('activate', Lang.bind(this, function () {
+      dialog.response(Gtk.ResponseType.OK);
+    }));
+
+    dialog.connect('response', Lang.bind(this, dialogResponseCb));
+
+    dialog.show_all();
+
   },
 
   _removeRepo: function () {
