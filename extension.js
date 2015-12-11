@@ -10,6 +10,12 @@ const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const GithubFetcher = Extension.imports.githubFetcher.GithubFetcher;
 const AddRepoDialog = Extension.imports.addRepoDialog.AddRepoDialog;
 const RepoMenuItem = Extension.imports.repoMenuItem.RepoMenuItem;
+const Convenience = Extension.imports.convenience;
+let metadata = Extension.metadata;
+
+const SETTINGS_GITHUB_USERNAME = 'github-username';
+const SETTINGS_GITHUB_PASSWORD = 'github-password';
+const SETTINGS_REPOSITORIES = 'repositories';
 
 const Icon = 'octoface';
 
@@ -18,11 +24,13 @@ const GithubProjects = new Lang.Class({
   Extends: PanelMenu.Button,
   _github: null,
 
-  _init: function () {
+  _init: function() {
     this.parent(0.0, "Github Projects", false);
+    this._settings = Convenience.getSettings();
+
     this._github = new GithubFetcher({
-      username: 'lagartoflojo',
-      password: ''
+      username: this._settings.get_string(SETTINGS_GITHUB_USERNAME),
+      password: this._settings.get_string(SETTINGS_GITHUB_PASSWORD)
     });
 
     let icon = new St.Icon({
@@ -36,32 +44,37 @@ const GithubProjects = new Lang.Class({
     this._startGithubSync();
   },
 
-  _initMenu: function () {
+  _initMenu: function() {
     let addRepoMenuItem = new PopupMenu.PopupMenuItem("Add repository");
-    addRepoMenuItem.actor.connect('button-press-event', Lang.bind(this, this._showAddRepoDialog));
+    addRepoMenuItem.actor.connect('button-press-event', Lang.bind(this,
+      this._showAddRepoDialog));
     this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
     this.menu.addMenuItem(addRepoMenuItem);
   },
 
-  _startGithubSync: function () {
+  _startGithubSync: function() {
     var self = this;
 
-    this._github.getRepos(function (repo) {
-      log(JSON.stringify(repo));
-      self.menu.addMenuItem(new RepoMenuItem(repo), 0);
-    });
+    this._github.getRepos(['SUSE/happy-customer', 'rails/rails',
+        'emberjs/ember.js'
+      ],
+      function(repo) {
+        self.menu.addMenuItem(new RepoMenuItem(repo), 0);
+      }
+    );
 
   },
 
-  _showAddRepoDialog: function () {
-    let dialog = new AddRepoDialog(Lang.bind(this, function(newRepo) {
-      log(newRepo);
-    }));
-    dialog.open(null);
+  _showAddRepoDialog: function() {
+    Util.spawn(["gnome-shell-extension-prefs", metadata.uuid]);
+    // let dialog = new AddRepoDialog(Lang.bind(this, function(newRepo) {
+    //   log(newRepo);
+    // }));
+    // dialog.open(null);
   },
 
-  destroy: function () {
-    if(this._github) {
+  destroy: function() {
+    if (this._github) {
       this._github.close();
       this._github = null;
     }
@@ -78,13 +91,13 @@ function init(extensionMeta) {
 
 function enable() {
   _githubProjects = new GithubProjects();
-  if(_githubProjects) {
+  if (_githubProjects) {
     Main.panel.addToStatusArea('github-projects', _githubProjects);
   }
 }
 
 function disable() {
-  if(_githubProjects) {
+  if (_githubProjects) {
     _githubProjects.destroy();
     _githubProjects = null;
   }

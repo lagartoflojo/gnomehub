@@ -4,16 +4,14 @@ const Base64 = Extension.imports.base64.Base64;
 
 const API_URL = 'https://api.github.com';
 
-const GithubFetcher = function (options) {
-  this.repoNames = ['rails/rails', 'emberjs/ember.js'];
-  this._httpSession = new Soup.Session({user_agent: 'lagartoflojo'});
+const GithubFetcher = function(options) {
+  this._httpSession = new Soup.Session({
+    user_agent: 'lagartoflojo//github-shell-extension'
+  });
   this.options = options;
 
   // Soup.Session.prototype.add_feature.call(this._httpSession,
   //   new Soup.ProxyResolverDefault());
-  // this._httpSession.connect('authenticate', function () {
-  //   log('requires auth!');
-  // });
 
   this.loadJSON = function(path, cb) {
     let self = this;
@@ -26,24 +24,26 @@ const GithubFetcher = function (options) {
     });
   };
 
-  this.authenticateMessage = function (message) {
-    if(this.options.username && this.options.password) {
-      let value = 'Basic ' + Base64.encode(this.options.username + ':' + this.options.password);
+  this.authenticateMessage = function(message) {
+    if (this.options.username.length && this.options.password.length) {
+      let value = 'Basic ' + Base64.encode(this.options.username + ':' +
+        this.options.password);
       message.request_headers.append('Authorization', value);
     }
   };
 
-  this.getRepos = function (cb) {
+  this.getRepos = function(repoNames, cb) {
     let self = this;
 
-    this.repoNames.forEach(function (repoName) {
-      self.loadJSON('/repos/' + repoName + '/pulls', function (pullRequestsData) {
+    repoNames.forEach(function(repoName) {
+      self.loadJSON('/repos/' + repoName + '/pulls', function(
+        pullRequestsData) {
         let repo = {
           name: repoName,
           pullRequests: []
         };
 
-        pullRequestsData.forEach(function (pullRequestData) {
+        pullRequestsData.forEach(function(pullRequestData) {
           let pr = {
             number: pullRequestData.number,
             title: pullRequestData.title,
@@ -57,7 +57,7 @@ const GithubFetcher = function (options) {
     }); // End repoNames.forEach
   };
 
-  this.close = function () {
+  this.close = function() {
     if (this._httpSession) {
       this._httpSession.abort();
     }

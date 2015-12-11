@@ -1,0 +1,22 @@
+<schemalist gettext-domain="gnome-shell-extensions">
+  <schema id="org.gnome.shell.extensions.github-projects" path="/org/gnome/shell/extensions/github-projects/">
+
+    <key name="github-username" type="s">
+      <default>''</default>
+      <summary>Github username.</summary>
+      <description>Your Github username.</description>
+    </key>
+
+    <key name="github-password" type="s">
+      <default>''</default>
+      <summary>Github password.</summary>
+      <description>Your Github password.</description>
+    </key>
+
+    <key name="repositories" type="as">
+      <default>[]</default>
+      <summary>A list of repos.</summary>
+      <description>A list of repos to be shown in the menu.</description>
+    </key>
+  </schema>
+</schemalist>
