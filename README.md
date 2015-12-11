@@ -6,12 +6,12 @@ Print messages with `log()` or `print()` and see them in:
 journalctl -f /usr/bin/gnome-session
 ```
 
-X Configurar usuario contrasena
-- Configurar repos
-- Actualizar PR's continuamente
-- Cargar estado de tests
-- Actualizar continuamente estado de tests
-- Traducciones
+- [x] Configurar usuario contrasena
+- [x] Configurar repos
+- [ ] Actualizar PR's continuamente
+- [ ] Cargar estado de tests
+- [ ] Actualizar continuamente estado de tests
+- [ ] Traducciones
 
 
 Launch settings
