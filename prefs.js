@@ -145,7 +145,18 @@ const GithubProjectsPrefsWidget = new GObject.Class({
       icon_name: Gtk.STOCK_REMOVE
     });
     removeTButton.connect('clicked', Lang.bind(this, this._removeRepo));
+    removeTButton.set_sensitive(false);
     toolbar.add(removeTButton);
+
+    this._repoTreeView.connect('cursor-changed', Lang.bind(this, function () {
+      let [any, model, iter] = this._repoTreeView.get_selection().get_selected();
+      if(any) {
+        removeTButton.set_sensitive(true);
+      }
+      else {
+        removeTButton.set_sensitive(false);
+      }
+    }));
 
     grid.add(toolbar);
 
