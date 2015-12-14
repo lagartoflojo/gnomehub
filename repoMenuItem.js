@@ -2,8 +2,10 @@ const Lang = imports.lang;
 const Util = imports.misc.util;
 const Signals = imports.signals;
 const PopupMenuItem = imports.ui.popupMenu.PopupMenuItem;
-const PopupImageMenuItem = imports.ui.popupMenu.PopupImageMenuItem;
 const PopupSubMenuMenuItem = imports.ui.popupMenu.PopupSubMenuMenuItem;
+
+const Extension = imports.misc.extensionUtils.getCurrentExtension();
+const PullRequestMenuItem = Extension.imports.pullRequestMenuItem.PullRequestMenuItem;
 
 const RepoMenuItem = new Lang.Class({
   Name: 'GithubProjects.RepoMenuItem',
@@ -23,25 +25,17 @@ const RepoMenuItem = new Lang.Class({
 
     // Open repo in browser
     let openRepoMenuItem = new PopupMenuItem("Open repo in browser");
-    openRepoMenuItem.actor.connect('button-press-event', function () {
+    openRepoMenuItem.connect('activate', function () {
       Util.spawnApp(['xdg-open', 'https://github.com/' + self.repo.name]);
     });
     this.menu.addMenuItem(openRepoMenuItem);
 
     //  Pull requests
     this.repo.pullRequests.forEach(function (pr) {
-      // emblem-ok-symbolic
-      // window-close-symbolic
-      // content-loading-symbolic
-      let prMenuItem = new PopupImageMenuItem(pr.title, 'emblem-ok-symbolic');
-      prMenuItem.actor.connect('button-press-event', function () {
-        Util.spawnApp([
-          'xdg-open',
-          'https://github.com/' + self.repo.name + '/pull/' + pr.number
-        ]);
-      });
+      let prMenuItem = new PullRequestMenuItem(this.repo, pr);
       self.menu.addMenuItem(prMenuItem);
     });
   }
 });
+
 Signals.addSignalMethods(RepoMenuItem.prototype);
