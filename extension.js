@@ -19,15 +19,15 @@ const SETTINGS_REPOSITORIES = 'repositories';
 const Icon = 'octoface';
 
 const GithubProjects = new Lang.Class({
-  Name: 'GithubProjects.GithubProjects',
+  Name: 'GithubProjects',
   Extends: PanelMenu.Button,
   _github: null,
   _repoMenuItems: [],
 
   _init: function() {
-    this.parent(0.0, "Github Projects", false);
+    this.parent(0.0, "Github Projects");
     this._settings = Convenience.getSettings();
-    this._settings.connect('changed::'+SETTINGS_REPOSITORIES,
+    this._settings.connect('changed::' + SETTINGS_REPOSITORIES,
       Lang.bind(this, this._updateRepos));
 
     this._github = new GithubFetcher({
@@ -43,7 +43,7 @@ const GithubProjects = new Lang.Class({
     this.actor.add_actor(icon);
 
     this._initMenu();
-    this._startGithubSync();
+    this._updateRepos();
   },
 
   _initMenu: function() {
@@ -59,15 +59,17 @@ const GithubProjects = new Lang.Class({
   },
 
   _updateRepos: function () {
+    var self = this;
+
     this._repoMenuItems.forEach(function (menuItem) {
       menuItem.destroy();
     });
-    this._repoMenuItems.splice(0);
-    this._startGithubSync();
-  },
 
-  _startGithubSync: function() {
-    var self = this;
+    this._repoMenuItems.splice(0); // Clear the array
+
+    let loading = new imports.ui.popupMenu.PopupMenuItem('Loading repos...');
+    loading.setSensitive(false);
+    this.menu.addMenuItem(loading, 0)
 
     this._github.getRepos(this._getRepos(),
       function(repo) {
@@ -80,7 +82,7 @@ const GithubProjects = new Lang.Class({
   },
 
   _showSettings: function() {
-    Util.spawn(["gnome-shell-extension-prefs", metadata.uuid]);
+    Util.spawn(['gnome-shell-extension-prefs', metadata.uuid]);
   }
 });
 
@@ -88,18 +90,18 @@ let _githubProjects;
 
 function init(extensionMeta) {
   let theme = imports.gi.Gtk.IconTheme.get_default();
-  theme.append_search_path(extensionMeta.path + "/icons");
+  theme.append_search_path(extensionMeta.path + '/icons');
 }
 
 function enable() {
+  log('Enabling Github Projects...');
   _githubProjects = new GithubProjects();
-  if (_githubProjects) {
-    Main.panel.addToStatusArea('github-projects', _githubProjects);
-  }
+  Main.panel.addToStatusArea('github-projects', _githubProjects);
 }
 
 function disable() {
   if (_githubProjects) {
+    log('Disabling Github Projects...');
     _githubProjects.destroy();
     _githubProjects = null;
   }
