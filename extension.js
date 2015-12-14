@@ -81,14 +81,6 @@ const GithubProjects = new Lang.Class({
 
   _showSettings: function() {
     Util.spawn(["gnome-shell-extension-prefs", metadata.uuid]);
-  },
-
-  destroy: function() {
-    if (this._github) {
-      this._github.close();
-      this._github = null;
-    }
-    this.parent();
   }
 });
 
