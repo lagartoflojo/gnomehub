@@ -54,7 +54,7 @@ const GithubProjects = new Lang.Class({
     this.menu.addMenuItem(showSettingsMenuItem);
   },
 
-  _getRepos: function () {
+  _getRepoNames: function () {
     return this._settings.get_strv(SETTINGS_REPOSITORIES);
   },
 
@@ -67,18 +67,29 @@ const GithubProjects = new Lang.Class({
 
     this._repoMenuItems.splice(0); // Clear the array
 
-    let loading = new imports.ui.popupMenu.PopupMenuItem('Loading repos...');
-    loading.setSensitive(false);
-    this.menu.addMenuItem(loading, 0)
+    if (!this.loading) {
+      this.loading = new imports.ui.popupMenu.PopupMenuItem('Loading repos...');
+      this.loading.setSensitive(false);
+      this.menu.addMenuItem(this.loading, 0);
+    }
 
-    this._github.getRepos(this._getRepos(),
-      function(repo) {
+    this._github.getRepos(this._getRepoNames()).then(repos => {
+      Object.keys(repos).forEach(repoName => {
+        let repo = repos[repoName];
         let menuItem = new RepoMenuItem(repo);
         self._repoMenuItems.push(menuItem);
         self.menu.addMenuItem(menuItem, 0);
-      }
-    );
+      });
 
+      this.loading.destroy();
+      this.loading = null;
+    }).catch((error) => {
+      log('ERROR (json): ' + JSON.stringify(error))
+      log('ERROR: ' + error)
+
+      this.loading.destroy();
+      this.loading = null;
+    });
   },
 
   _showSettings: function() {

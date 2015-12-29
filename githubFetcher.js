@@ -10,12 +10,17 @@ const GithubFetcher = function(options) {
   this.options = options;
 
   this.loadJSON = function(path) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       fetch(API_URL + path, {
         preprocess: this.authenticate,
         userAgent: 'lagartoflojo/github-shell-extension'
       }).then(response => {
-        resolve(response.json());
+        if(response.ok) {
+          resolve(response.json());
+        }
+        else {
+          reject(response);
+        }
       });
     });
   };
@@ -28,38 +33,78 @@ const GithubFetcher = function(options) {
     }
   };
 
-  this.getRepos = function(repoNames, cb) {
-    let self = this;
+  this.getRepos = function(repoNames) {
+    return new Promise((resolve, reject) => {
+      this._fetchPullRequests(repoNames).then(reposData => {
+        let repos = {};
 
-
-    repoNames.forEach(repoName => {
-      this.loadJSON('/repos/' + repoName + '/pulls').then(pullRequestsData => {
-        let repo = {
-          name: repoName,
-          pullRequests: []
-        };
-
-        pullRequestsData.forEach(function(pullRequestData) {
-          let pr = {
-            number: pullRequestData.number,
-            title: pullRequestData.title,
-            url: pullRequestData.url,
-            headSha: pullRequestData.head.sha,
-            status: null
-          };
-
-          // self.loadJSON('/repos/' + repoName + '/status/' + pr.headSha, function (statusData) {
-          //   // Only update the status if there are any checks in the PR
-          //   if(statusData.statuses.length) {
-          //     pr.status = statusData.state;
-          //   }
-          // });
-
-          repo.pullRequests.push(pr);
+        reposData.forEach(repoData => {
+          let repoName = repoData.repo_full_name;
+          repos[repoName] = repoData;
         });
 
-        cb(repo);
-      }); // End loadJason
-    }); // End repoNames.forEach
+        resolve(repos);
+      }).catch(response => {
+        log(JSON.stringify(response))
+        // No internet: (try to reload data when internet is back)
+        // {"message":{},"headers":{},"url":"https://api.github.com/repos/lagartoflojo/minijq/pulls","status":2,"statusText":"Cannot resolve hostname","ok":false}
+        // Not found / no permissions:
+        // {"message":{},"headers":{},"url":"https://api.github.com/repos/asdsadasd/adaerear/pulls","status":404,"statusText":"Not Found","ok":false}
+        reject(response);
+      });
+    });
+  };
+
+  this._fetchPullRequests = function (repoNames) {
+    let promises = repoNames.map(repoName => {
+      return this._loadPullRequests(repoName);
+    });
+
+    return Promise.all(promises);
+  };
+
+  this._loadPullRequests = function (repoName) {
+    return new Promise((resolve, reject) => {
+      this.loadJSON('/repos/' + repoName + '/pulls').then(prs => {
+        let repo = {
+          repo_full_name: repoName,
+          pull_requests: prs.map(pr => this._processPullRequest(pr))
+        };
+
+        resolve(repo);
+      }).catch(response => {
+        reject(response);
+      });
+    });
+  };
+
+  this._processPullRequest = function (prJSON) {
+    return {
+      number: prJSON.number,
+      title: prJSON.title,
+      url: prJSON.url,
+      headSha: prJSON.head.sha,
+      status: null
+    };
   };
 }
+
+
+
+// pullRequestsData.forEach(function(pullRequestData) {
+//   let pr = {
+//     number: pullRequestData.number,
+//     title: pullRequestData.title,
+//     url: pullRequestData.url,
+//     headSha: pullRequestData.head.sha,
+//     status: null
+//   };
+
+// self.loadJSON('/repos/' + repoName + '/status/' + pr.headSha, function (statusData) {
+//   // Only update the status if there are any checks in the PR
+//   if(statusData.statuses.length) {
+//     pr.status = statusData.state;
+//   }
+// });
+
+// repo.pullRequests.push(pr);
