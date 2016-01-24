@@ -107,7 +107,7 @@ function init(extensionMeta) {
 function enable() {
   log('Enabling Github Projects...');
   _githubProjects = new GithubProjects();
-  Main.panel.addToStatusArea('github-projects', _githubProjects);
+  Main.panel.addToStatusArea('github-projects', _githubProjects, 0, 'right');
 }
 
 function disable() {
