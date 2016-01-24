@@ -33,13 +33,18 @@ const GithubFetcher = function(options) {
     }
   };
 
+  // Receives an array of repo names
+  // Resolves to a hash where the key is the repo name, and
+  // the value is a hash with the keys repoFullname and pullRequests.
   this.getRepos = function(repoNames) {
     return new Promise((resolve, reject) => {
       this._fetchPullRequests(repoNames).then(reposData => {
         let repos = {};
 
+        // Build a hash, where key is the repo name
+        // and value is the array of PRs
         reposData.forEach(repoData => {
-          let repoName = repoData.repo_full_name;
+          let repoName = repoData.repoFullName;
           repos[repoName] = repoData;
         });
 
@@ -55,6 +60,9 @@ const GithubFetcher = function(options) {
     });
   };
 
+  // Receives an array of repo names
+  // Resolves to an array of hashes, where each hash has the keys
+  // repoFullName and pullRequests
   this._fetchPullRequests = function (repoNames) {
     let promises = repoNames.map(repoName => {
       return this._loadPullRequests(repoName);
@@ -63,12 +71,14 @@ const GithubFetcher = function(options) {
     return Promise.all(promises);
   };
 
+  // Receives the name of a single repo
+  // Resolves to hash with two keys: repoFullName and pullRequests.
   this._loadPullRequests = function (repoName) {
     return new Promise((resolve, reject) => {
       this.loadJSON('/repos/' + repoName + '/pulls').then(prs => {
         let repo = {
-          repo_full_name: repoName,
-          pull_requests: prs.map(pr => this._processPullRequest(pr))
+          repoFullName: repoName,
+          pullRequests: prs.map(pr => this._processPullRequest(pr))
         };
 
         resolve(repo);
