@@ -74,8 +74,7 @@ const GithubProjects = new Lang.Class({
     }
 
     this._github.getRepos(this._getRepoNames()).then(repos => {
-      Object.keys(repos).forEach(repoName => {
-        let repo = repos[repoName];
+      repos.forEach(repo => {
         let menuItem = new RepoMenuItem(repo);
         self._repoMenuItems.push(menuItem);
         self.menu.addMenuItem(menuItem, 0);
@@ -84,6 +83,11 @@ const GithubProjects = new Lang.Class({
       this.loading.destroy();
       this.loading = null;
     }).catch((error) => {
+      // No internet: (try to reload data when internet is back)
+      // {"message":{},"headers":{},"url":"https://api.github.com/repos/lagartoflojo/minijq/pulls","status":2,"statusText":"Cannot resolve hostname","ok":false}
+      // Not found / no permissions:
+      // {"message":{},"headers":{},"url":"https://api.github.com/repos/asdsadasd/adaerear/pulls","status":404,"statusText":"Not Found","ok":false}
+
       log('ERROR (json): ' + JSON.stringify(error))
       log('ERROR: ' + error)
 

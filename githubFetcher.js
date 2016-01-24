@@ -34,36 +34,9 @@ const GithubFetcher = function(options) {
   };
 
   // Receives an array of repo names
-  // Resolves to a hash where the key is the repo name, and
-  // the value is a hash with the keys repoFullname and pullRequests.
-  this.getRepos = function(repoNames) {
-    return new Promise((resolve, reject) => {
-      this._fetchPullRequests(repoNames).then(reposData => {
-        let repos = {};
-
-        // Build a hash, where key is the repo name
-        // and value is the array of PRs
-        reposData.forEach(repoData => {
-          let repoName = repoData.repoFullName;
-          repos[repoName] = repoData;
-        });
-
-        resolve(repos);
-      }).catch(response => {
-        log(JSON.stringify(response))
-        // No internet: (try to reload data when internet is back)
-        // {"message":{},"headers":{},"url":"https://api.github.com/repos/lagartoflojo/minijq/pulls","status":2,"statusText":"Cannot resolve hostname","ok":false}
-        // Not found / no permissions:
-        // {"message":{},"headers":{},"url":"https://api.github.com/repos/asdsadasd/adaerear/pulls","status":404,"statusText":"Not Found","ok":false}
-        reject(response);
-      });
-    });
-  };
-
-  // Receives an array of repo names
   // Resolves to an array of hashes, where each hash has the keys
   // repoFullName and pullRequests
-  this._fetchPullRequests = function (repoNames) {
+  this.getRepos = function(repoNames) {
     let promises = repoNames.map(repoName => {
       return this._loadPullRequests(repoName);
     });
@@ -83,6 +56,7 @@ const GithubFetcher = function(options) {
 
         resolve(repo);
       }).catch(response => {
+        response.repoFullName = repoName;
         reject(response);
       });
     });
