@@ -14,7 +14,7 @@ const RepoMenuItem = new Lang.Class({
 
   _init: function (repo) {
     this.repo = repo;
-    this.parent(repo.repo_full_name, true);
+    this.parent(repo.repoFullName, true);
     this.icon.icon_name = 'repo';
     // this.status.text = "The text on the right side";
     this._initMenu();
@@ -29,7 +29,7 @@ const RepoMenuItem = new Lang.Class({
     this.menu.addMenuItem(openRepoMenuItem);
 
     //  Pull requests
-    this.repo.pull_requests.forEach((pr) => {
+    this.repo.pullRequests.forEach((pr) => {
       let prMenuItem = new PullRequestMenuItem(this.repo, pr);
       this.menu.addMenuItem(prMenuItem);
     });

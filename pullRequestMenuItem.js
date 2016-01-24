@@ -24,7 +24,7 @@ const PullRequestMenuItem = new Lang.Class({
     this.connect('activate', function () {
       Util.spawnApp([
         'xdg-open',
-        'https://github.com/' + repo.repo_full_name + '/pull/' + pullRequest.number
+        'https://github.com/' + repo.repoFullName + '/pull/' + pullRequest.number
       ]);
     });
   }
