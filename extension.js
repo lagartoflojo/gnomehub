@@ -46,7 +46,7 @@ const GithubProjects = new Lang.Class({
     this._updateRepos();
   },
 
-  _initMenu: function() {
+  _initMenu: function () {
     let showSettingsMenuItem = new PopupMenu.PopupMenuItem("Add repository");
     showSettingsMenuItem.actor.connect('button-press-event', Lang.bind(this,
       this._showSettings));
@@ -61,7 +61,7 @@ const GithubProjects = new Lang.Class({
   _updateRepos: function () {
     var self = this;
 
-    this._repoMenuItems.forEach(function (menuItem) {
+    this._repoMenuItems.forEach(menuItem => {
       menuItem.destroy();
     });
 
@@ -80,9 +80,7 @@ const GithubProjects = new Lang.Class({
         self.menu.addMenuItem(menuItem, 0);
       });
 
-      this.loading.destroy();
-      this.loading = null;
-    }).catch((error) => {
+    }).catch(error => {
       // No internet: (try to reload data when internet is back)
       // {"message":{},"headers":{},"url":"https://api.github.com/repos/lagartoflojo/minijq/pulls","status":2,"statusText":"Cannot resolve hostname","ok":false}
       // Not found / no permissions:
@@ -90,7 +88,7 @@ const GithubProjects = new Lang.Class({
 
       log('ERROR (json): ' + JSON.stringify(error))
       log('ERROR: ' + error)
-
+    }).finally(() => {
       this.loading.destroy();
       this.loading = null;
     });
