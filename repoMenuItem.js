@@ -24,7 +24,7 @@ const RepoMenuItem = new Lang.Class({
     // Open repo in browser
     let openRepoMenuItem = new PopupMenuItem("Open repo in browser");
     openRepoMenuItem.connect('activate', () => {
-      Util.spawnApp(['xdg-open', 'https://github.com/' + this.repo.name]);
+      Util.spawnApp(['xdg-open', 'https://github.com/' + this.repo.repoFullName]);
     });
     this.menu.addMenuItem(openRepoMenuItem);
 
