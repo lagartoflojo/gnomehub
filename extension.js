@@ -105,6 +105,10 @@ const GithubProjects = new Lang.Class({
   destroy: function () {
     Timing.clearInterval(this._interval);
     this.parent();
+
+    // Menu items are destroyed automatically when the extension is disabled,
+    // but they are not cleared from this array, so we must do it manually.
+    this._repoMenuItems.splice(0);
   }
 });
 
