@@ -29,7 +29,7 @@ const GithubProjects = new Lang.Class({
     this.parent(0.0, "Github Projects");
     this._settings = Convenience.getSettings();
     this._settings.connect('changed::' + SETTINGS_REPOSITORIES,
-      Lang.bind(this, this._updateRepos));
+      Lang.bind(this, this._initRepos));
 
     this._github = new GithubFetcher({
       username: this._settings.get_string(SETTINGS_GITHUB_USERNAME),
@@ -61,11 +61,13 @@ const GithubProjects = new Lang.Class({
   },
 
   _initRepos: function () {
-    this.loading = new imports.ui.popupMenu.PopupMenuItem('Loading repos...');
-    this.loading.setSensitive(false);
-    this.menu.addMenuItem(this.loading, 0);
+    if (this._getRepoNames().length) {
+      this.loading = new imports.ui.popupMenu.PopupMenuItem('Loading repos...');
+      this.loading.setSensitive(false);
+      this.menu.addMenuItem(this.loading, 0);
 
-    this._updateRepos();
+      this._updateRepos();
+    }
   },
 
   _stopLoading: function () {
