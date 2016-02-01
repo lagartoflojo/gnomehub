@@ -69,12 +69,18 @@ const GithubProjects = new Lang.Class({
   },
 
   _updateRepos: function () {
-    this._github.getRepos(this._getRepoNames()).then(repos => {
+    let repoNames = this._getRepoNames();
+
+    this._github.getRepos(repoNames).then(repos => {
       this._repoMenuItems.forEach(menuItem => menuItem.destroy());
       this._repoMenuItems.splice(0); // Clear the array
       this._clearStatusMessage();
 
-      repos.forEach(repo => {
+      let reposByName = {};
+      repos.forEach((repo) => reposByName[repo.repoFullName] = repo);
+
+      repoNames.reverse().forEach(repoName => {
+        let repo = reposByName[repoName];
         let menuItem = new RepoMenuItem(repo);
         this._repoMenuItems.push(menuItem);
         this.menu.addMenuItem(menuItem, 0);
@@ -91,8 +97,14 @@ const GithubProjects = new Lang.Class({
     log('ERROR (json): ' + JSON.stringify(error))
     log('ERROR: ' + error)
 
-    if (error.status == 2) {
+    if (error.status === 2 || error.status === 8) {
       this._setStatusMessage('No internet connection');
+    }
+    else if (error.status === 403) {
+      this._setStatusMessage('Github API rate limit exceeded.\nPlease login in extension settings.');
+    }
+    else {
+      this._setStatusMessage(error.statusText);
     }
   },
 
