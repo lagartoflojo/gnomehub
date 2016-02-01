@@ -10,6 +10,7 @@ const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const GithubFetcher = Extension.imports.githubFetcher.GithubFetcher;
 const RepoMenuItem = Extension.imports.repoMenuItem.RepoMenuItem;
 const Convenience = Extension.imports.convenience;
+const Timing = Extension.imports.timing;
 let metadata = Extension.metadata;
 
 const SETTINGS_GITHUB_USERNAME = 'github-username';
@@ -28,7 +29,7 @@ const GithubProjects = new Lang.Class({
     this.parent(0.0, "Github Projects");
     this._settings = Convenience.getSettings();
     this._settings.connect('changed::' + SETTINGS_REPOSITORIES,
-      Lang.bind(this, this._updateRepos));
+      Lang.bind(this, this._initRepos));
 
     this._github = new GithubFetcher({
       username: this._settings.get_string(SETTINGS_GITHUB_USERNAME),
@@ -43,13 +44,14 @@ const GithubProjects = new Lang.Class({
     this.actor.add_actor(icon);
 
     this._initMenu();
-    this._updateRepos();
+    this._initRepos();
+    this._interval = Timing.setInterval(Lang.bind(this, this._updateRepos), 30000);
   },
 
-  _initMenu: function() {
+  _initMenu: function () {
     let showSettingsMenuItem = new PopupMenu.PopupMenuItem("Add repository");
-    showSettingsMenuItem.actor.connect('button-press-event', Lang.bind(this,
-      this._showSettings));
+    showSettingsMenuItem.actor.connect('button-press-event',
+      Lang.bind(this, this._showSettings));
     this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
     this.menu.addMenuItem(showSettingsMenuItem);
   },
@@ -58,46 +60,67 @@ const GithubProjects = new Lang.Class({
     return this._settings.get_strv(SETTINGS_REPOSITORIES);
   },
 
-  _updateRepos: function () {
-    var self = this;
+  _initRepos: function () {
+    if (this._getRepoNames().length) {
+      this._setStatusMessage('Loading repos...');
 
-    this._repoMenuItems.forEach(function (menuItem) {
-      menuItem.destroy();
-    });
-
-    this._repoMenuItems.splice(0); // Clear the array
-
-    if (!this.loading) {
-      this.loading = new imports.ui.popupMenu.PopupMenuItem('Loading repos...');
-      this.loading.setSensitive(false);
-      this.menu.addMenuItem(this.loading, 0);
+      this._updateRepos();
     }
+  },
 
+  _updateRepos: function () {
     this._github.getRepos(this._getRepoNames()).then(repos => {
+      this._repoMenuItems.forEach(menuItem => menuItem.destroy());
+      this._repoMenuItems.splice(0); // Clear the array
+      this._clearStatusMessage();
+
       repos.forEach(repo => {
         let menuItem = new RepoMenuItem(repo);
-        self._repoMenuItems.push(menuItem);
-        self.menu.addMenuItem(menuItem, 0);
+        this._repoMenuItems.push(menuItem);
+        this.menu.addMenuItem(menuItem, 0);
       });
+    }).catch(Lang.bind(this, this._handleError));
+  },
 
-      this.loading.destroy();
-      this.loading = null;
-    }).catch((error) => {
-      // No internet: (try to reload data when internet is back)
-      // {"message":{},"headers":{},"url":"https://api.github.com/repos/lagartoflojo/minijq/pulls","status":2,"statusText":"Cannot resolve hostname","ok":false}
-      // Not found / no permissions:
-      // {"message":{},"headers":{},"url":"https://api.github.com/repos/asdsadasd/adaerear/pulls","status":404,"statusText":"Not Found","ok":false}
+  _handleError: function (error) {
+    // No internet: (try to reload data when internet is back)
+    // {"message":{},"headers":{},"url":"https://api.github.com/repos/lagartoflojo/minijq/pulls","status":2,"statusText":"Cannot resolve hostname","ok":false}
+    // Not found / no permissions:
+    // {"message":{},"headers":{},"url":"https://api.github.com/repos/asdsadasd/adaerear/pulls","status":404,"statusText":"Not Found","ok":false}
 
-      log('ERROR (json): ' + JSON.stringify(error))
-      log('ERROR: ' + error)
+    log('ERROR (json): ' + JSON.stringify(error))
+    log('ERROR: ' + error)
 
-      this.loading.destroy();
-      this.loading = null;
-    });
+    if (error.status == 2) {
+      this._setStatusMessage('No internet connection');
+    }
+  },
+
+  _setStatusMessage: function (message) {
+    this._clearStatusMessage();
+    this._statusMessage = new imports.ui.popupMenu.PopupMenuItem(message);
+    this._statusMessage.setSensitive(false);
+    this.menu.addMenuItem(this._statusMessage, 0);
+  },
+
+  _clearStatusMessage: function () {
+    if(this._statusMessage) {
+      this._statusMessage.destroy();
+      this._statusMessage = null;
+    }
   },
 
   _showSettings: function() {
     Util.spawn(['gnome-shell-extension-prefs', metadata.uuid]);
+  },
+
+  destroy: function () {
+    Timing.clearInterval(this._interval);
+    this.parent();
+
+    // Menu items are destroyed automatically when the extension is disabled,
+    // but they are not cleared from this array, so we must do it manually.
+    this._repoMenuItems.splice(0);
   }
 });
 

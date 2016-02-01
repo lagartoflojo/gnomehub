@@ -195,3 +195,20 @@ Promise.reject = function(reason) {
 Promise.resolve = function(value) {
     return new Promise(resolve => resolve(value));
 };
+
+
+// Runs after the promise resolves or rejects.
+// Source: https://github.com/matthew-andrews/Promise.prototype.finally
+Promise.prototype['finally'] = function finallyPolyfill(callback) {
+  var constructor = this.constructor;
+
+  return this.then(function(value) {
+      return constructor.resolve(callback()).then(function() {
+        return value;
+      });
+    }, function(reason) {
+      return constructor.resolve(callback()).then(function() {
+        throw reason;
+      });
+    });
+};

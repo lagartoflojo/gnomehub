@@ -29,7 +29,7 @@ const RepoMenuItem = new Lang.Class({
     this.menu.addMenuItem(openRepoMenuItem);
 
     //  Pull requests
-    this.repo.pullRequests.forEach((pr) => {
+    this.repo.pullRequests.forEach(pr => {
       let prMenuItem = new PullRequestMenuItem(this.repo, pr);
       this.menu.addMenuItem(prMenuItem);
     });
