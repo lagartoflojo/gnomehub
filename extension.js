@@ -62,18 +62,9 @@ const GithubProjects = new Lang.Class({
 
   _initRepos: function () {
     if (this._getRepoNames().length) {
-      this.loading = new imports.ui.popupMenu.PopupMenuItem('Loading repos...');
-      this.loading.setSensitive(false);
-      this.menu.addMenuItem(this.loading, 0);
+      this._setStatusMessage('Loading repos...');
 
       this._updateRepos();
-    }
-  },
-
-  _stopLoading: function () {
-    if(this.loading) {
-      this.loading.destroy();
-      this.loading = null;
     }
   },
 
@@ -81,23 +72,42 @@ const GithubProjects = new Lang.Class({
     this._github.getRepos(this._getRepoNames()).then(repos => {
       this._repoMenuItems.forEach(menuItem => menuItem.destroy());
       this._repoMenuItems.splice(0); // Clear the array
+      this._clearStatusMessage();
 
       repos.forEach(repo => {
         let menuItem = new RepoMenuItem(repo);
         this._repoMenuItems.push(menuItem);
         this.menu.addMenuItem(menuItem, 0);
       });
-    }).catch(error => {
-      // No internet: (try to reload data when internet is back)
-      // {"message":{},"headers":{},"url":"https://api.github.com/repos/lagartoflojo/minijq/pulls","status":2,"statusText":"Cannot resolve hostname","ok":false}
-      // Not found / no permissions:
-      // {"message":{},"headers":{},"url":"https://api.github.com/repos/asdsadasd/adaerear/pulls","status":404,"statusText":"Not Found","ok":false}
+    }).catch(Lang.bind(this, this._handleError));
+  },
 
-      log('ERROR (json): ' + JSON.stringify(error))
-      log('ERROR: ' + error)
-    }).finally(() => {
-      this._stopLoading();
-    });
+  _handleError: function (error) {
+    // No internet: (try to reload data when internet is back)
+    // {"message":{},"headers":{},"url":"https://api.github.com/repos/lagartoflojo/minijq/pulls","status":2,"statusText":"Cannot resolve hostname","ok":false}
+    // Not found / no permissions:
+    // {"message":{},"headers":{},"url":"https://api.github.com/repos/asdsadasd/adaerear/pulls","status":404,"statusText":"Not Found","ok":false}
+
+    log('ERROR (json): ' + JSON.stringify(error))
+    log('ERROR: ' + error)
+
+    if (error.status == 2) {
+      this._setStatusMessage('No internet connection');
+    }
+  },
+
+  _setStatusMessage: function (message) {
+    this._clearStatusMessage();
+    this._statusMessage = new imports.ui.popupMenu.PopupMenuItem(message);
+    this._statusMessage.setSensitive(false);
+    this.menu.addMenuItem(this._statusMessage, 0);
+  },
+
+  _clearStatusMessage: function () {
+    if(this._statusMessage) {
+      this._statusMessage.destroy();
+      this._statusMessage = null;
+    }
   },
 
   _showSettings: function() {
