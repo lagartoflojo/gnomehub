@@ -23,7 +23,7 @@ const GithubProjects = new Lang.Class({
   Name: 'GithubProjects',
   Extends: PanelMenu.Button,
   _github: null,
-  _repoMenuItems: [],
+  _repoMenuItems: {},
 
   _init: function() {
     this.parent(0.0, "Github Projects");
@@ -62,8 +62,7 @@ const GithubProjects = new Lang.Class({
 
   _initRepos: function () {
     if (this._getRepoNames().length) {
-      this._setStatusMessage('Loading repos...');
-
+      this._setStatusMessage('Loading repositories...');
       this._updateRepos();
     }
   },
@@ -72,21 +71,25 @@ const GithubProjects = new Lang.Class({
     let repoNames = this._getRepoNames();
 
     this._github.getRepos(repoNames).then(repos => {
-      this._repoMenuItems.forEach(menuItem => menuItem.destroy());
-      this._repoMenuItems.splice(0); // Clear the array
       this._clearStatusMessage();
 
       let reposByName = {};
       repos.forEach((repo) => reposByName[repo.repoFullName] = repo);
 
-      repoNames.reverse().forEach(repoName => {
-        let repo = reposByName[repoName];
-        let menuItem = new RepoMenuItem(repo);
-        this._repoMenuItems.push(menuItem);
-        this.menu.addMenuItem(menuItem, 0);
-      });
+      repoNames.reverse().forEach((repoName) => this._addRepoMenuItem(reposByName[repoName]));
     }).catch(Lang.bind(this, this._handleError));
   },
+
+  _addRepoMenuItem: function (repo) {
+    let repoMenuItem = this._repoMenuItems[repo.repoFullName];
+    if(!repoMenuItem) {
+      repoMenuItem = new RepoMenuItem(repo);
+      this.menu.addMenuItem(repoMenuItem, 0);
+      this._repoMenuItems[repo.repoFullName] = repoMenuItem;
+    }
+
+    repoMenuItem.updatePullRequests(repo.pullRequests);
+  }, // TODO Remove removed repos
 
   _handleError: function (error) {
     // No internet: (try to reload data when internet is back)
@@ -129,10 +132,7 @@ const GithubProjects = new Lang.Class({
   destroy: function () {
     Timing.clearInterval(this._interval);
     this.parent();
-
-    // Menu items are destroyed automatically when the extension is disabled,
-    // but they are not cleared from this array, so we must do it manually.
-    this._repoMenuItems.splice(0);
+    this._repoMenuItems = {};
   }
 });
 
