@@ -104,7 +104,7 @@ const GithubProjects = new Lang.Class({
       this._setStatusMessage('No internet connection');
     }
     else if (error.status === 403) {
-      this._setStatusMessage('Github API rate limit exceeded.\nPlease login in extension settings.');
+      this._setStatusMessage('Github API rate limit exceeded.\nPlease log in in extension settings.');
     }
     else {
       this._setStatusMessage(error.statusText);
