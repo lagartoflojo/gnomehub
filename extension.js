@@ -29,10 +29,11 @@ const GithubProjects = new Lang.Class({
     this._settings.connect('changed::' + SETTINGS_REPOSITORIES,
       Lang.bind(this, this._initRepos));
 
-    this._github = new GithubFetcher({
-      username: this._settings.get_string(SETTINGS_GITHUB_USERNAME),
-      password: this._settings.get_string(SETTINGS_GITHUB_PASSWORD)
-    });
+    this._settings.connect('changed::' + SETTINGS_GITHUB_USERNAME,
+      Lang.bind(this, this._initRepos));
+
+    this._settings.connect('changed::' + SETTINGS_GITHUB_PASSWORD,
+      Lang.bind(this, this._initRepos));
 
     let icon = new St.Icon({
       icon_name: Icon,
@@ -60,6 +61,10 @@ const GithubProjects = new Lang.Class({
   },
 
   _initRepos: function () {
+    this._github = new GithubFetcher({
+      username: this._settings.get_string(SETTINGS_GITHUB_USERNAME),
+      password: this._settings.get_string(SETTINGS_GITHUB_PASSWORD)
+    });
     if (this._getRepoNames().length) {
       this._setStatusMessage('Loading repositories...');
       this._updateRepos();
