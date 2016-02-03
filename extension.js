@@ -22,8 +22,6 @@ const Icon = 'octoface';
 const GithubProjects = new Lang.Class({
   Name: 'GithubProjects',
   Extends: PanelMenu.Button,
-  _github: null,
-  _repoMenuItems: {},
 
   _init: function() {
     this.parent(0.0, "Github Projects");
@@ -43,6 +41,7 @@ const GithubProjects = new Lang.Class({
 
     this.actor.add_actor(icon);
 
+    this._repoMenuItems = {};
     this._initMenu();
     this._initRepos();
     this._interval = Timing.setInterval(Lang.bind(this, this._updateRepos), 30000);
@@ -132,7 +131,6 @@ const GithubProjects = new Lang.Class({
   destroy: function () {
     Timing.clearInterval(this._interval);
     this.parent();
-    this._repoMenuItems = {};
   }
 });
 
