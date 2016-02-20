@@ -67,11 +67,19 @@ const GithubProjects = new Lang.Class({
     });
     if (this._getRepoNames().length) {
       this._setStatusMessage('Loading repositories...');
-      this._updateRepos();
+      this._updateRepos(true);
     }
   },
 
-  _updateRepos: function () {
+  _updateRepos: function (reset) {
+    if (reset) {
+      for(let repoName in this._repoMenuItems) {
+        this._repoMenuItems[repoName].destroy();
+      }
+      this._repoMenuItems = {};
+    }
+
+
     let repoNames = this._getRepoNames();
 
     this._github.getRepos(repoNames).then(repos => {
@@ -82,6 +90,8 @@ const GithubProjects = new Lang.Class({
 
       repoNames.reverse().forEach((repoName) => this._addRepoMenuItem(reposByName[repoName]));
     }).catch(Lang.bind(this, this._handleError));
+
+    this._removeDeletedRepos();
   },
 
   _addRepoMenuItem: function (repo) {
@@ -93,7 +103,18 @@ const GithubProjects = new Lang.Class({
     }
 
     repoMenuItem.updatePullRequests(repo.pullRequests);
-  }, // TODO Remove removed repos
+  },
+
+  _removeDeletedRepos: function () {
+    let repoNames = this._getRepoNames();
+    let repoMenuItems = Object.keys(this._repoMenuItems);
+    let removedRepos = repoMenuItems.filter(function(i) { return repoNames.indexOf(i) < 0; });
+
+    removedRepos.forEach((repo) => {
+      this._repoMenuItems[repo].destroy();
+      delete this._repoMenuItems[repo];
+    });
+  },
 
   _handleError: function (error) {
     // No internet: (try to reload data when internet is back)
