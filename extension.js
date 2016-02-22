@@ -65,6 +65,7 @@ const GithubProjects = new Lang.Class({
       username: this._settings.get_string(SETTINGS_GITHUB_USERNAME),
       password: this._settings.get_string(SETTINGS_GITHUB_PASSWORD)
     });
+
     if (this._getRepoNames().length) {
       this._setStatusMessage('Loading repositories...');
       this._updateRepos(true);
@@ -110,7 +111,7 @@ const GithubProjects = new Lang.Class({
     let repoMenuItems = Object.keys(this._repoMenuItems);
     let removedRepos = repoMenuItems.filter(function(i) { return repoNames.indexOf(i) < 0; });
 
-    removedRepos.forEach((repo) => {
+    removedRepos.forEach(repo => {
       this._repoMenuItems[repo].destroy();
       delete this._repoMenuItems[repo];
     });

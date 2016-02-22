@@ -44,6 +44,17 @@ const GithubFetcher = function(options) {
     return Promise.all(promises);
   };
 
+  // Receives a repo name and a sha.
+  // Resolves to a JSON with the details of the PR.
+  this.getPullRequest = function(repoName, sha) {
+    self.loadJSON('/repos/' + repoName + '/status/' + sha).then(statusData => {
+      log(JSON.stringify(statusData));
+      //if(statusData.statuses.length) {
+      //  pr.status = statusData.state;
+      //}
+    });
+  };
+
   // Receives the name of a single repo
   // Resolves to hash with two keys: repoFullName and pullRequests.
   this._loadPullRequests = function (repoName) {
