@@ -49,7 +49,7 @@ const GithubProjects = new Lang.Class({
   },
 
   _initMenu: function () {
-    let showSettingsMenuItem = new PopupMenu.PopupMenuItem("Add repository");
+    let showSettingsMenuItem = new PopupMenu.PopupMenuItem("Settings");
     showSettingsMenuItem.actor.connect('button-press-event',
       Lang.bind(this, this._showSettings));
     this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
