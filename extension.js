@@ -131,6 +131,9 @@ const GithubProjects = new Lang.Class({
     else if (error.status === 403) {
       this._setStatusMessage('Github API rate limit exceeded.\nPlease log in in extension settings.');
     }
+    else if (error.status === 404) {
+      this._setStatusMessage('Repository "' + error.repoFullName + '" not found.\nIf this is a private repo, please log in in extension settings.');
+    }
     else {
       this._setStatusMessage(error.statusText);
     }
