@@ -17,7 +17,7 @@ const SETTINGS_GITHUB_USERNAME = 'github-username';
 const SETTINGS_GITHUB_PASSWORD = 'github-password';
 const SETTINGS_REPOSITORIES = 'repositories';
 
-const Icon = 'octoface';
+const Icon = 'git';
 
 const GithubProjects = new Lang.Class({
   Name: 'GithubProjects',
