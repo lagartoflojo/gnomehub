@@ -171,14 +171,14 @@ function init(extensionMeta) {
 }
 
 function enable() {
-  log('Enabling Github Projects...');
+  log('Enabling GnomeHub...');
   _githubProjects = new GithubProjects();
   Main.panel.addToStatusArea('github-projects', _githubProjects, 0, 'right');
 }
 
 function disable() {
   if (_githubProjects) {
-    log('Disabling Github Projects...');
+    log('Disabling GnomeHub...');
     _githubProjects.destroy();
     _githubProjects = null;
   }
