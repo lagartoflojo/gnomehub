@@ -136,13 +136,13 @@ const GithubProjectsPrefsWidget = new GObject.Class({
     toolbar.get_style_context().add_class(Gtk.STYLE_CLASS_INLINE_TOOLBAR);
 
     let addTButton = new Gtk.ToolButton({
-      icon_name: Gtk.STOCK_ADD
+      icon_name: "list-add-symbolic"
     });
     addTButton.connect('clicked', Lang.bind(this, this._addRepo));
     toolbar.add(addTButton);
 
     let removeTButton = new Gtk.ToolButton({
-      icon_name: Gtk.STOCK_REMOVE
+      icon_name: "list-remove-symbolic"
     });
     removeTButton.connect('clicked', Lang.bind(this, this._removeRepo));
     removeTButton.set_sensitive(false);
