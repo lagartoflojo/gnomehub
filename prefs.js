@@ -41,6 +41,7 @@ const GithubProjectsPrefsWidget = new GObject.Class({
 
 
     let notebook = new Gtk.Notebook();
+    // notebook.set_show_border(false);
 
     let rps = this._drawRepositorySettings();
     notebook.append_page(rps, new Gtk.Label({
@@ -53,6 +54,12 @@ const GithubProjectsPrefsWidget = new GObject.Class({
     }));
 
     this.add(notebook);
+
+    this.add(new Gtk.Label({
+      label: '<span color="#888">GnomeHub ' + Extension.metadata.version + '</span>',
+      use_markup: true,
+      xalign: 1
+    }));
   },
 
   _drawGithubSettings: function() {
@@ -65,10 +72,8 @@ const GithubProjectsPrefsWidget = new GObject.Class({
 
     grid.add(new Gtk.Label({
       label: 'To access your private repos, log in to GitHub.',
-      use_markup: true,
       wrap: true,
-      xalign: 0,
-      track_visited_links: false
+      xalign: 0
     }));
 
     grid.add(new Gtk.Label({
