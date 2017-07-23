@@ -64,7 +64,7 @@ const GithubProjectsPrefsWidget = new GObject.Class({
     grid.set_orientation(Gtk.Orientation.VERTICAL);
 
     grid.add(new Gtk.Label({
-      label: 'Please log in to GitHub in order to access your private repos.',
+      label: 'To access your private repos, log in to GitHub.',
       use_markup: true,
       wrap: true,
       xalign: 0,
