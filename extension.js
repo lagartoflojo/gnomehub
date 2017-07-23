@@ -24,7 +24,7 @@ const GithubProjects = new Lang.Class({
   Extends: PanelMenu.Button,
 
   _init: function() {
-    this.parent(0.0, "Github Projects");
+    this.parent(0.0, "GitHub Projects");
     this._settings = Convenience.getSettings();
     this._settings.connect('changed::' + SETTINGS_REPOSITORIES,
       Lang.bind(this, this._initRepos));

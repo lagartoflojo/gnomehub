@@ -49,7 +49,7 @@ const GithubProjectsPrefsWidget = new GObject.Class({
 
     let ghs = this._drawGithubSettings();
     notebook.append_page(ghs, new Gtk.Label({
-      label: 'Github Credentials'
+      label: 'GitHub Credentials'
     }));
 
     this.add(notebook);
@@ -64,7 +64,7 @@ const GithubProjectsPrefsWidget = new GObject.Class({
     grid.set_orientation(Gtk.Orientation.VERTICAL);
 
     grid.add(new Gtk.Label({
-      label: 'Please log in to Github in order to access your private repos.',
+      label: 'Please log in to GitHub in order to access your private repos.',
       use_markup: true,
       wrap: true,
       xalign: 0,
@@ -165,7 +165,7 @@ const GithubProjectsPrefsWidget = new GObject.Class({
 
   _addRepo: function () {
     let dialog = new Gtk.Dialog({
-      title: "Add Github repository",
+      title: "Add a GitHub repository",
       transient_for: this.get_toplevel(),
       modal: true,
       use_header_bar: true
