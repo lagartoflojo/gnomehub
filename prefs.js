@@ -18,7 +18,7 @@ const SETTINGS_GITHUB_USERNAME = 'github-username';
 const SETTINGS_GITHUB_PASSWORD = 'github-password';
 const SETTINGS_REPOSITORIES = 'repositories';
 
-function init() {
+function init () {
   // Convenience.initTranslations();
 }
 
@@ -27,7 +27,7 @@ const GithubProjectsPrefsWidget = new GObject.Class({
   GTypeName: 'GithubProjectsPrefsWidget',
   Extends: Gtk.Grid,
 
-  _init: function(params) {
+  _init: function (params) {
     this.parent(params);
     this.margin = 12;
     this.row_spacing = this.column_spacing = 6;
@@ -39,30 +39,29 @@ const GithubProjectsPrefsWidget = new GObject.Class({
     this._settings.connect('changed::' + SETTINGS_REPOSITORIES, Lang.bind(
       this, this._updateRepos));
 
-
     let notebook = new Gtk.Notebook();
     // notebook.set_show_border(false);
 
     let rps = this._drawRepositorySettings();
     notebook.append_page(rps, new Gtk.Label({
-      label: 'Repositories'
+      label: "Repositories"
     }));
 
     let ghs = this._drawGithubSettings();
     notebook.append_page(ghs, new Gtk.Label({
-      label: 'GitHub Credentials'
+      label: "GitHub Credentials"
     }));
 
     this.add(notebook);
 
     this.add(new Gtk.Label({
-      label: '<span color="#888">GnomeHub ' + Extension.metadata.version + '</span>',
+      label: '<span color="#888">GnomeHub v' + Extension.metadata.version + '</span>',
       use_markup: true,
       xalign: 1
     }));
   },
 
-  _drawGithubSettings: function() {
+  _drawGithubSettings: function () {
     let grid = new Gtk.Grid({
       row_spacing: 20
     });
@@ -71,13 +70,13 @@ const GithubProjectsPrefsWidget = new GObject.Class({
     grid.set_orientation(Gtk.Orientation.VERTICAL);
 
     grid.add(new Gtk.Label({
-      label: 'To access your private repos, log in to GitHub.',
+      label: "To access your private repos, log in to GitHub.",
       wrap: true,
       xalign: 0
     }));
 
     grid.add(new Gtk.Label({
-      label: '<b>Username</b>',
+      label: "<b>Username</b>",
       use_markup: true,
       halign: Gtk.Align.START
     }));
@@ -92,8 +91,8 @@ const GithubProjectsPrefsWidget = new GObject.Class({
       Gio.SettingsBindFlags.DEFAULT);
 
     grid.add(new Gtk.Label({
-      label: '<b>Access token</b> (<a href="https://github.com/settings/tokens">' +
-        'Create a new access token</a> if you don’t have one)',
+      label: "<b>Access token</b> (<a href=\"https://github.com/settings/tokens\">" +
+        "Create a new access token</a> if you don’t have one)",
       use_markup: true,
       halign: Gtk.Align.START
     }));
@@ -111,7 +110,7 @@ const GithubProjectsPrefsWidget = new GObject.Class({
     return grid;
   },
 
-  _drawRepositorySettings: function() {
+  _drawRepositorySettings: function () {
     let grid = new Gtk.Grid();
     grid.set_orientation(Gtk.Orientation.VERTICAL);
 
@@ -131,7 +130,7 @@ const GithubProjectsPrefsWidget = new GObject.Class({
 
     let nameRenderer = new Gtk.CellRendererText();
     appColumn.pack_start(nameRenderer, true);
-    appColumn.add_attribute(nameRenderer, "text", 0);
+    appColumn.add_attribute(nameRenderer, 'text', 0);
 
     this._repoTreeView.append_column(appColumn);
     grid.add(this._repoTreeView);
@@ -141,24 +140,23 @@ const GithubProjectsPrefsWidget = new GObject.Class({
     toolbar.get_style_context().add_class(Gtk.STYLE_CLASS_INLINE_TOOLBAR);
 
     let addTButton = new Gtk.ToolButton({
-      icon_name: "list-add-symbolic"
+      icon_name: 'list-add-symbolic'
     });
     addTButton.connect('clicked', Lang.bind(this, this._addRepo));
     toolbar.add(addTButton);
 
     let removeTButton = new Gtk.ToolButton({
-      icon_name: "list-remove-symbolic"
+      icon_name: 'list-remove-symbolic'
     });
     removeTButton.connect('clicked', Lang.bind(this, this._removeRepo));
     removeTButton.set_sensitive(false);
     toolbar.add(removeTButton);
 
     this._repoTreeView.connect('cursor-changed', Lang.bind(this, function () {
-      let [any, model, iter] = this._repoTreeView.get_selection().get_selected();
-      if(any) {
+      let [any] = this._repoTreeView.get_selection().get_selected();
+      if (any) {
         removeTButton.set_sensitive(true);
-      }
-      else {
+      } else {
         removeTButton.set_sensitive(false);
       }
     }));
@@ -183,7 +181,7 @@ const GithubProjectsPrefsWidget = new GObject.Class({
     addBtn.set_sensitive(false);
 
     let header = dialog.get_header_bar();
-    header.set_subtitle('Format: user/repo')
+    header.set_subtitle("Format: user/repo");
 
     let entryGrid = new Gtk.Grid({
       column_spacing: 5,
@@ -203,26 +201,24 @@ const GithubProjectsPrefsWidget = new GObject.Class({
     dialog.get_content_area().add(entryGrid);
 
     repoEntry.connect('changed', Lang.bind(this, function (entry) {
-      if(githubRegex.matchRepo(entry.get_text())) {
+      if (githubRegex.matchRepo(entry.get_text())) {
         addBtn.set_sensitive(true);
-      }
-      else {
+      } else {
         addBtn.set_sensitive(false);
       }
     }));
 
-    let dialogResponseCb = function(dialog, id) {
-      if(id === Gtk.ResponseType.OK && addBtn.get_sensitive()) {
+    let dialogResponseCb = function (dialog, id) {
+      if (id === Gtk.ResponseType.OK && addBtn.get_sensitive()) {
         let repo = repoEntry.get_text();
         let repos = this._getSettingsRepos();
         repos.push(repo);
         this._setSettingsRepos(repos);
         dialog.destroy();
-      }
-      else if (id === Gtk.ResponseType.CANCEL){
+      } else if (id === Gtk.ResponseType.CANCEL) {
         dialog.destroy();
       }
-    }
+    };
 
     repoEntry.connect('activate', Lang.bind(this, function () {
       dialog.response(Gtk.ResponseType.OK);
@@ -231,7 +227,6 @@ const GithubProjectsPrefsWidget = new GObject.Class({
     dialog.connect('response', Lang.bind(this, dialogResponseCb));
 
     dialog.show_all();
-
   },
 
   _removeRepo: function () {
@@ -241,14 +236,14 @@ const GithubProjectsPrefsWidget = new GObject.Class({
       let repos = this._getSettingsRepos();
 
       let repoIndex = repos.indexOf(repo);
-      if(repoIndex >= 0) {
+      if (repoIndex >= 0) {
         repos.splice(repoIndex, 1);
         this._setSettingsRepos(repos);
       }
     }
   },
 
-  _updateRepos: function() {
+  _updateRepos: function () {
     var self = this;
     this._repoStore.clear();
 
@@ -269,7 +264,7 @@ const GithubProjectsPrefsWidget = new GObject.Class({
   }
 });
 
-function buildPrefsWidget() {
+function buildPrefsWidget () {
   let widget = new GithubProjectsPrefsWidget();
   widget.show_all();
 
