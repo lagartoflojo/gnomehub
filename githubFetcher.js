@@ -1,8 +1,8 @@
 const Soup = imports.gi.Soup;
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
-const Base64 = Extension.imports.base64.Base64;
 const fetch = Extension.imports.fetch.fetch;
 const Promise = Extension.imports.promise.Promise;
+const GLib = imports.gi.GLib;
 
 const API_URL = 'https://api.github.com';
 
@@ -27,7 +27,7 @@ const GithubFetcher = function(options) {
 
   this.authenticate = request => {
     if (this.options.username.length && this.options.password.length) {
-      let value = 'Basic ' + Base64.encode(this.options.username + ':' +
+      let value = 'Basic ' + GLib.base64_encode(this.options.username + ':' +
         this.options.password);
       request.request_headers.append('Authorization', value);
     }
