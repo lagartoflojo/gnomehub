@@ -5,6 +5,6 @@
   "description": "Quickly access your GitHub repositories and their PRs from the top panel",
   "settings-schema": "org.gnome.shell.extensions.github-projects",
   "original-authors": ["hschmidt@suse.com"],
-  "version": "0.1.0",
+  "version": 1,
   "url": "https://github.com/lagartoflojo/gnomehub"
 }
