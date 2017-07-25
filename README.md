@@ -1,3 +1,7 @@
+# Installation
+
+You can install GnomeHub directly from its page on [extensions.gnome.org](https://extensions.gnome.org/extension/1263/gnomehub/).
+
 # Debugging
 
 Print messages with `log()` or `print()` and see them in:
