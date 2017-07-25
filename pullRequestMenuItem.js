@@ -18,33 +18,39 @@ const PullRequestMenuItem = new Lang.Class({
   _init: function (repo, pullRequest) {
     this.parent();
 
+    this.repo = repo;
+    this.pullRequest = pullRequest;
+
     let title = pullRequest.title;
     if (title.length > 64) {
       title = title.substr(0, 64) + "...";
     }
 
-    this.titleLabel = new St.Label({ text: title });
     this.numberLabel = new St.Label({ text: '#' + pullRequest.number });
     this.numberLabel.set_style('color: #888');
     this.actor.add_child(this.numberLabel);
+
+    this.titleLabel = new St.Label({ text: title });
     this.actor.add_child(this.titleLabel);
     this.actor.label_actor = this.titleLabel;
 
     this._icon = new St.Icon({ style_class: 'popup-menu-icon' });
     this.actor.add_child(this._icon, { align: St.Align.END });
 
-    // this.setIcon(iconName);
+    this.setIcon(this.statusIcons[pullRequest.status]);
 
-    this.connect('activate', function () {
-      Util.spawnApp([
-        'xdg-open',
-        'https://github.com/' + repo.repoFullName + '/pull/' + pullRequest.number
-      ]);
-    });
+    this.connect('activate', () => this.openPR());
   },
 
-  setIcon: function(name) {
+  setIcon: function (name) {
     this._icon.icon_name = name;
+  },
+
+  openPR: function () {
+    Util.spawnApp([
+      'xdg-open',
+      'https://github.com/' + this.repo.repoFullName + '/pull/' + this.pullRequest.number
+    ]);
   }
 });
 
