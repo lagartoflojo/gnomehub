@@ -2,7 +2,7 @@
   "shell-version": ["3.16", "3.18", "3.20", "3.22", "3.24"],
   "name": "GnomeHub",
   "uuid": "gnomehub@hschmidt.suse.com",
-  "description": "Quickly access your GitHub repositories and their PRs from the top panel",
+  "description": "Quickly access your favorite GitHub repositories and their open pull requests from the top panel.",
   "settings-schema": "org.gnome.shell.extensions.github-projects",
   "original-authors": ["hschmidt@suse.com"],
   "version": 1,
