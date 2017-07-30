@@ -13,7 +13,7 @@ const GithubFetcher = function(options) {
     return new Promise((resolve, reject) => {
       fetch(API_URL + path, {
         preprocess: this.authenticate,
-        userAgent: 'lagartoflojo/github-shell-extension'
+        userAgent: 'lagartoflojo/gnomehub'
       }).then(response => {
         if(response.ok) {
           resolve(response.json());

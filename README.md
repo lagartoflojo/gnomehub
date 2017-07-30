@@ -1,8 +1,28 @@
-# Installation
+# GnomeHub
+
+ A Gnome Shell extension that shows your favorite GitHub repositories and their open pull requests on the top panel.
+
+ ![](screenshot.png)
+
+## Installation
 
 You can install GnomeHub directly from its page on [extensions.gnome.org](https://extensions.gnome.org/extension/1263/gnomehub/).
 
-# Debugging
+## Testing
+
+Tests are written in [Jasmine](https://jasmine.github.io). To run them, you need
+[jasmine-gjs](https://github.com/ptomato/jasmine-gjs), a special runner of Jasmine designed for GJS.
+You can install it by [compiling it](https://github.com/ptomato/jasmine-gjs/#installation) or
+by downloading a [pre-compiled package](https://software.opensuse.org/package/jasmine-gjs) for your OS.
+
+Once installed, you can run the tests:
+
+```bash
+$ cd gnomehub
+$ jasmine
+```
+
+## Debugging
 
 Print messages with `log()` or `print()` and see them in:
 
@@ -10,17 +30,8 @@ Print messages with `log()` or `print()` and see them in:
 journalctl -f /usr/bin/gnome-session
 ```
 
-- [x] Configurar usuario contrasena
-- [x] Configurar repos
-- [ ] Actualizar PR's continuamente
-- [ ] Cargar estado de tests
-- [ ] Actualizar continuamente estado de tests
-- [ ] Traducciones
+## Credits
 
+Created by Hernán Schmidt during the SUSE Hack Week 2015.
 
-Launch settings
-https://github.com/todevelopers/gnome-shell-extension-rss-feed/blob/master/rss-feed%40gnome-shell-extension.todevelopers.github.com/extension.js#L154-L158
-
-
-What are label actors for?
-[Accessibility](https://mail.gnome.org/archives/gnome-shell-list/2015-September/msg00040.html)
+&copy; 2017 Hernán Schmidt. This software is licensed under the GPLv3 License.
