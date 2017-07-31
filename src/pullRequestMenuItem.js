@@ -23,16 +23,16 @@ const PullRequestMenuItem = new Lang.Class({
 
     let title = pullRequest.title;
     if (title.length > 64) {
-      title = title.substr(0, 64) + "...";
+      title = title.substr(0, 64) + '...';
     }
-
-    this.numberLabel = new St.Label({ text: '#' + pullRequest.number });
-    this.numberLabel.set_style('color: #888');
-    this.actor.add_child(this.numberLabel);
 
     this.titleLabel = new St.Label({ text: title });
     this.actor.add_child(this.titleLabel);
     this.actor.label_actor = this.titleLabel;
+
+    this.numberLabel = new St.Label({ text: '#' + pullRequest.number });
+    this.numberLabel.set_style('color: #888');
+    this.actor.add_child(this.numberLabel);
 
     this._icon = new St.Icon({ style_class: 'popup-menu-icon' });
     this.actor.add_child(this._icon, { align: St.Align.END });
