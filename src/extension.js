@@ -9,8 +9,8 @@ const Util = imports.misc.util;
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const GithubFetcher = Extension.imports.githubFetcher.GithubFetcher;
 const RepoMenuItem = Extension.imports.repoMenuItem.RepoMenuItem;
-const Convenience = Extension.imports.convenience;
-const Timing = Extension.imports.timing;
+const Convenience = Extension.imports.lib.convenience;
+const Timing = Extension.imports.lib.timing;
 let metadata = Extension.metadata;
 
 const SETTINGS_GITHUB_USERNAME = 'github-username';

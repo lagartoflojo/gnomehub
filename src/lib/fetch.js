@@ -15,7 +15,7 @@
 
 const Soup = imports.gi.Soup;
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
-const Promise = Extension.imports.promise.Promise;
+const Promise = Extension.imports.lib.promise.Promise;
 
 function Response(message) {
     this.message = message;

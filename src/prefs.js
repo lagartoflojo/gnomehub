@@ -11,8 +11,8 @@ const Lang = imports.lang;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Extension = ExtensionUtils.getCurrentExtension();
-const Convenience = Extension.imports.convenience;
-const githubRegex = Extension.imports.githubRegex;
+const Convenience = Extension.imports.lib.convenience;
+const githubRegex = Extension.imports.lib.githubRegex;
 
 const SETTINGS_GITHUB_USERNAME = 'github-username';
 const SETTINGS_GITHUB_PASSWORD = 'github-password';

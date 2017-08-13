@@ -1,4 +1,4 @@
-const matchRepo = imports.githubRegex.matchRepo;
+const matchRepo = imports.lib.githubRegex.matchRepo;
 
 describe('githubRegex', function () {
   describe('matchRepo', function () {
