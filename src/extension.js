@@ -19,8 +19,8 @@ const SETTINGS_REPOSITORIES = 'repositories';
 
 const Icon = 'git';
 
-const GithubProjects = new Lang.Class({
-  Name: 'GithubProjects',
+const GnomeHub = new Lang.Class({
+  Name: 'GnomeHub',
   Extends: PanelMenu.Button,
 
   _init: function() {
@@ -172,7 +172,7 @@ function init(extensionMeta) {
 
 function enable() {
   log('Enabling GnomeHub...');
-  _githubProjects = new GithubProjects();
+  _githubProjects = new GnomeHub();
   Main.panel.addToStatusArea('github-projects', _githubProjects, 0, 'right');
 }
 
