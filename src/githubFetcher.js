@@ -1,7 +1,7 @@
 const Soup = imports.gi.Soup;
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
-const fetch = Extension.imports.fetch.fetch;
-const Promise = Extension.imports.promise.Promise;
+const fetch = Extension.imports.lib.fetch.fetch;
+const Promise = Extension.imports.lib.promise.Promise;
 const GLib = imports.gi.GLib;
 
 const API_URL = 'https://api.github.com';
