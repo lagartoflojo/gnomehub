@@ -8,7 +8,7 @@ const Util = imports.misc.util;
 
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const GithubFetcher = Extension.imports.githubFetcher.GithubFetcher;
-const RepoMenuItem = Extension.imports.repoMenuItem.RepoMenuItem;
+const RepoMenuItem = Extension.imports.widgets.repoMenuItem.RepoMenuItem;
 const Convenience = Extension.imports.lib.convenience;
 const Timing = Extension.imports.lib.timing;
 let metadata = Extension.metadata;
