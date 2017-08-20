@@ -13,6 +13,9 @@ const Convenience = Extension.imports.lib.convenience;
 const Timing = Extension.imports.lib.timing;
 let metadata = Extension.metadata;
 
+const Gettext = imports.gettext.domain('gnomehub');
+const _ = Gettext.gettext;
+
 const SETTINGS_GITHUB_USERNAME = 'github-username';
 const SETTINGS_GITHUB_PASSWORD = 'github-password';
 const SETTINGS_REPOSITORIES = 'repositories';
@@ -49,7 +52,7 @@ const GithubProjects = new Lang.Class({
   },
 
   _initMenu: function () {
-    let showSettingsMenuItem = new PopupMenu.PopupMenuItem("Settings");
+    let showSettingsMenuItem = new PopupMenu.PopupMenuItem(_("Settings"));
     showSettingsMenuItem.actor.connect('button-press-event',
       Lang.bind(this, this._showSettings));
     this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
@@ -66,7 +69,7 @@ const GithubProjects = new Lang.Class({
       password: this._settings.get_string(SETTINGS_GITHUB_PASSWORD)
     });
     if (this._getRepoNames().length) {
-      this._setStatusMessage('Loading repositories...');
+      this._setStatusMessage(_('Loading repositories...'));
       this._updateRepos(true);
     }
   },
@@ -126,13 +129,13 @@ const GithubProjects = new Lang.Class({
     log('ERROR: ' + error)
 
     if (error.status === 2 || error.status === 8) {
-      this._setStatusMessage('No internet connection');
+      this._setStatusMessage(_('No internet connection'));
     }
     else if (error.status === 403) {
-      this._setStatusMessage('Github API rate limit exceeded.\nPlease log in in extension settings.');
+      this._setStatusMessage(_('Github API rate limit exceeded.\nPlease log in in extension settings.'));
     }
     else if (error.status === 404) {
-      this._setStatusMessage('Repository "' + error.repoFullName + '" not found.\nIf this is a private repo, please log in in extension settings.');
+      this._setStatusMessage(_('Repository "') + error.repoFullName + _('" not found.\nIf this is a private repo, please log in in extension settings.'));
     }
     else {
       this._setStatusMessage(error.statusText);
@@ -168,6 +171,7 @@ let _githubProjects;
 function init(extensionMeta) {
   let theme = imports.gi.Gtk.IconTheme.get_default();
   theme.append_search_path(extensionMeta.path + '/icons');
+  Convenience.initTranslations('gnomehub');
 }
 
 function enable() {

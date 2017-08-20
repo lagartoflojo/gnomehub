@@ -1,0 +1,92 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-08-20 16:37+0200\n"
+"PO-Revision-Date: 2017-08-20 16:37+0200\n"
+"Last-Translator: Jonatan Hatakeyama Zeidler <jonatan_zeidler@gmx."
+"de>\n"
+"Language-Team: \n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.1\n"
+
+#: src/extension.js:55
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: src/extension.js:72
+msgid "Loading repositories..."
+msgstr "Projektarchive werden geladen …"
+
+#: src/extension.js:132
+msgid "No internet connection"
+msgstr "Keine Internetverbindung"
+
+#: src/extension.js:135
+msgid ""
+"Github API rate limit exceeded.\n"
+"Please log in in extension settings."
+msgstr ""
+"Grenze der GitHub API-Rate überschritten.\n"
+"Bitte in den Erweiterungseinstellungen anmelden."
+
+#: src/extension.js:138
+msgid "Repository \""
+msgstr "Projektarchiv \""
+
+#: src/extension.js:138
+msgid ""
+"\" not found.\n"
+"If this is a private repo, please log in in extension settings."
+msgstr ""
+"\" nicht gefunden.\n"
+"Falls dies ein privates Projektarchiv ist, bitte in den "
+"Erweiterungseinstellungen anmelden."
+
+#: src/prefs.js:47
+msgid "Repositories"
+msgstr "Projektarchive"
+
+#: src/prefs.js:52
+msgid "GitHub Credentials"
+msgstr "GitHub-Anmeldedaten"
+
+#: src/prefs.js:73
+msgid "To access your private repos, log in to GitHub."
+msgstr "Um auf private Projektarchive zuzugreifen, bei GitHub anmelden"
+
+#: src/prefs.js:79
+msgid "Username"
+msgstr "Nutzername"
+
+#: src/prefs.js:94
+msgid "Access token"
+msgstr "Zugangsschlüssel"
+
+#: src/prefs.js:95
+msgid "Create a new access token"
+msgstr "Einen neuen Zugangsschlüssel erzeugen"
+
+#: src/prefs.js:95
+msgid "if you don’t have one"
+msgstr "falls noch keiner erzeugt wurde"
+
+#: src/prefs.js:128
+msgid "Repository"
+msgstr "Projektarchiv"
+
+#: src/prefs.js:171
+msgid "Add a GitHub repository"
+msgstr "Ein GitHub-Projektarchiv hinzufügen"
+
+#: src/prefs.js:184
+msgid "Format: user/repo"
+msgstr "Format: nutzer/projektarchiv"

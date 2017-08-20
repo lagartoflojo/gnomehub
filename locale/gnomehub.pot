@@ -1,0 +1,86 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-08-20 16:36+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/extension.js:55
+msgid "Settings"
+msgstr ""
+
+#: src/extension.js:72
+msgid "Loading repositories..."
+msgstr ""
+
+#: src/extension.js:132
+msgid "No internet connection"
+msgstr ""
+
+#: src/extension.js:135
+msgid ""
+"Github API rate limit exceeded.\n"
+"Please log in in extension settings."
+msgstr ""
+
+#: src/extension.js:138
+msgid "Repository \""
+msgstr ""
+
+#: src/extension.js:138
+msgid ""
+"\" not found.\n"
+"If this is a private repo, please log in in extension settings."
+msgstr ""
+
+#: src/prefs.js:47
+msgid "Repositories"
+msgstr ""
+
+#: src/prefs.js:52
+msgid "GitHub Credentials"
+msgstr ""
+
+#: src/prefs.js:73
+msgid "To access your private repos, log in to GitHub."
+msgstr ""
+
+#: src/prefs.js:79
+msgid "Username"
+msgstr ""
+
+#: src/prefs.js:94
+msgid "Access token"
+msgstr ""
+
+#: src/prefs.js:95
+msgid "Create a new access token"
+msgstr ""
+
+#: src/prefs.js:95
+msgid "if you don’t have one"
+msgstr ""
+
+#: src/prefs.js:128
+msgid "Repository"
+msgstr ""
+
+#: src/prefs.js:171
+msgid "Add a GitHub repository"
+msgstr ""
+
+#: src/prefs.js:184
+msgid "Format: user/repo"
+msgstr ""
