@@ -30,6 +30,21 @@ Print messages with `log()` or `print()` and see them in:
 journalctl -f /usr/bin/gnome-session
 ```
 
+## Translation
+
+To update the translation template file `locale/gnomehub.pot` run:
+
+```
+make potfile
+```
+
+To add a new language, simply copy the template and place it at the correct location, e.g. with the following commands (replacing `ll` by your language code):
+
+```
+mkdir -p locale/ll/LC_MESSAGES
+cp locale/gnomehub.pot locale/fr/LC_MESSAGES/gnomehub.po
+```
+
 ## Credits
 
 Created by Hernán Schmidt during the SUSE Hack Week 2015.
