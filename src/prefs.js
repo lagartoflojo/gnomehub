@@ -6,8 +6,8 @@ const Gio = imports.gi.Gio;
 const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
 
-// const Gettext = imports.gettext.domain('gnome-shell-extensions');
-// const _ = Gettext.gettext;
+const Gettext = imports.gettext.domain('gnomehub');
+const _ = Gettext.gettext;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Extension = ExtensionUtils.getCurrentExtension();
@@ -19,7 +19,7 @@ const SETTINGS_GITHUB_PASSWORD = 'github-password';
 const SETTINGS_REPOSITORIES = 'repositories';
 
 function init () {
-  // Convenience.initTranslations();
+  Convenience.initTranslations('gnomehub');
 }
 
 const GithubProjectsPrefsWidget = new GObject.Class({
@@ -44,12 +44,12 @@ const GithubProjectsPrefsWidget = new GObject.Class({
 
     let rps = this._drawRepositorySettings();
     notebook.append_page(rps, new Gtk.Label({
-      label: "Repositories"
+      label: _("Repositories")
     }));
 
     let ghs = this._drawGithubSettings();
     notebook.append_page(ghs, new Gtk.Label({
-      label: "GitHub Credentials"
+      label: _("GitHub Credentials")
     }));
 
     this.add(notebook);
@@ -70,13 +70,13 @@ const GithubProjectsPrefsWidget = new GObject.Class({
     grid.set_orientation(Gtk.Orientation.VERTICAL);
 
     grid.add(new Gtk.Label({
-      label: "To access your private repos, log in to GitHub.",
+      label: _("To access your private repos, log in to GitHub."),
       wrap: true,
       xalign: 0
     }));
 
     grid.add(new Gtk.Label({
-      label: "<b>Username</b>",
+      label: "<b>"+_("Username")+"</b>",
       use_markup: true,
       halign: Gtk.Align.START
     }));
@@ -91,8 +91,8 @@ const GithubProjectsPrefsWidget = new GObject.Class({
       Gio.SettingsBindFlags.DEFAULT);
 
     grid.add(new Gtk.Label({
-      label: "<b>Access token</b> (<a href=\"https://github.com/settings/tokens\">" +
-        "Create a new access token</a> if you don’t have one)",
+      label: "<b>"+_("Access token")+"</b> (<a href=\"https://github.com/settings/tokens\">" +
+        _("Create a new access token")+"</a> "+_("if you don’t have one")+")",
       use_markup: true,
       halign: Gtk.Align.START
     }));
@@ -125,7 +125,7 @@ const GithubProjectsPrefsWidget = new GObject.Class({
     let appColumn = new Gtk.TreeViewColumn({
       expand: true,
       sort_column_id: 0,
-      title: "Repository"
+      title: _("Repository")
     });
 
     let nameRenderer = new Gtk.CellRendererText();
@@ -168,7 +168,7 @@ const GithubProjectsPrefsWidget = new GObject.Class({
 
   _addRepo: function () {
     let dialog = new Gtk.Dialog({
-      title: "Add a GitHub repository",
+      title: _("Add a GitHub repository"),
       transient_for: this.get_toplevel(),
       modal: true,
       use_header_bar: true
@@ -181,7 +181,7 @@ const GithubProjectsPrefsWidget = new GObject.Class({
     addBtn.set_sensitive(false);
 
     let header = dialog.get_header_bar();
-    header.set_subtitle("Format: user/repo");
+    header.set_subtitle(_("Format: user/repo"));
 
     let entryGrid = new Gtk.Grid({
       column_spacing: 5,

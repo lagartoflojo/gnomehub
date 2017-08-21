@@ -29,6 +29,9 @@ extension: ./schemas/gschemas.compiled $(MSGSRC:.po=.mo)
 ./locale/%.mo: ./locale/%.po
 	msgfmt -c $< -o $@
 
+potfile: 
+	xgettext -k_ -kN_ -o locale/gnomehub.pot src/prefs.js src/extension.js --from-code=UTF-8
+
 install: install-local
 
 install-local: _build
