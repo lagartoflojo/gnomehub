@@ -13,7 +13,7 @@ const GnomeHubPanelButton = new Lang.Class({
   Extends: PanelMenu.Button,
 
   _init: function() {
-    this.parent(0.0, "GnomeHub");
+    this.parent(0.0, 'GnomeHub');
 
     let icon = new St.Icon({
       icon_name: 'git',
@@ -24,6 +24,7 @@ const GnomeHubPanelButton = new Lang.Class({
 
     this._repoMenuItems = {};
     this._initMenu();
+    this.setLoading();
     // this._initRepos();
   },
 
@@ -33,13 +34,6 @@ const GnomeHubPanelButton = new Lang.Class({
     this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
     this.menu.addMenuItem(showSettingsMenuItem);
   },
-
-  // _initRepos: function () {
-  //   if (this.repositories.length) {
-  //     this._setStatusMessage('Loading repositories...');
-  //     this._updateRepos(true);
-  //   }
-  // },
 
   render: function (repositories, reset) {
     if (reset) {
@@ -58,6 +52,10 @@ const GnomeHubPanelButton = new Lang.Class({
     repositories.forEach((repo) => this._addRepoMenuItem(repo));
 
     this._removeDeletedRepos(repositories);
+  },
+
+  setLoading: function () {
+    this._setStatusMessage('Loading repositories...');
   },
 
   _addRepoMenuItem: function (repo) {
@@ -82,7 +80,7 @@ const GnomeHubPanelButton = new Lang.Class({
     });
   },
 
-  _handleError: function (error) {
+  renderError: function (error) {
     // No internet: (try to reload data when internet is back)
     // {"message":{},"headers":{},"url":"https://api.github.com/repos/lagartoflojo/minijq/pulls","status":2,"statusText":"Cannot resolve hostname","ok":false}
     // Not found / no permissions:

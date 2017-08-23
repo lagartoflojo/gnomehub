@@ -48,7 +48,7 @@ const GnomeHubController = new Lang.Class({
   showRepos: function () {
     this._github.getRepos(this.getUserRepos()).then(repos => {
       this.panelButton.render(repos);
-    }) // TODO Show errors: .catch(Lang.bind(this, this._handleError));;
+    }).catch((error) => this.panelButton.renderError(error));
   },
 
   showSettings: function () {
