@@ -6,7 +6,7 @@ const GLib = imports.gi.GLib;
 
 const API_URL = 'https://api.github.com';
 
-const GithubFetcher = function(options) {
+var GithubFetcher = function(options) {
   this.options = options;
 
   this.loadJSON = function(path) {
