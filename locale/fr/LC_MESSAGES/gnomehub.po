@@ -3,10 +3,9 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-10-03 15:34+0200\n"
 "PO-Revision-Date: 2017-10-03 15:34+0200\n"
@@ -87,4 +86,5 @@ msgid ""
 "If this is a private repo, please log in in extension settings."
 msgstr ""
 "\" introuvable.\n"
-"Si ce repo est privé, merci de vous connecter dans les paramètres de l'extension."
+"Si ce repo est privé, merci de vous connecter dans les paramètres de "
+"l'extension."
