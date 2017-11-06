@@ -4,7 +4,7 @@ const Signals = imports.signals;
 const St = imports.gi.St;
 const PopupBaseMenuItem = imports.ui.popupMenu.PopupBaseMenuItem;
 
-const PullRequestMenuItem = new Lang.Class({
+var PullRequestMenuItem = new Lang.Class({
   Name: 'GithubProjects.PullRequestMenuItem',
   Extends: PopupBaseMenuItem,
 
@@ -35,7 +35,7 @@ const PullRequestMenuItem = new Lang.Class({
     this.actor.add_child(this.numberLabel);
 
     this._icon = new St.Icon({ style_class: 'popup-menu-icon' });
-    this.actor.add_child(this._icon, { align: St.Align.END });
+    this.actor.add_child(this._icon);
 
     this.setIcon(this.statusIcons[pullRequest.status]);
 

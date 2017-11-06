@@ -7,7 +7,7 @@ const PopupSubMenuMenuItem = imports.ui.popupMenu.PopupSubMenuMenuItem;
 const Extension = imports.misc.extensionUtils.getCurrentExtension();
 const PullRequestMenuItem = Extension.imports.pullRequestMenuItem.PullRequestMenuItem;
 
-const RepoMenuItem = new Lang.Class({
+var RepoMenuItem = new Lang.Class({
   Name: 'GithubProjects.RepoMenuItem',
   Extends: PopupSubMenuMenuItem,
 
