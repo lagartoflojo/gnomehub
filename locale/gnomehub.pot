@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-08 18:01+0100\n"
+"POT-Creation-Date: 2017-11-08 18:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,14 +32,14 @@ msgstr ""
 #: src/extension.js:133
 msgid ""
 "GitHub API rate limit exceeded.\n"
-"Please log in in extension settings."
+"Log in to GitHub in extension settings to increase the limit."
 msgstr ""
 
 #: src/extension.js:135
 #, javascript-format
 msgid ""
 "Repository \"%s\" not found.\n"
-"If this is a private repo, please log in in extension settings."
+"If this is a private repo, log in to GitHub in extension settings."
 msgstr ""
 
 #: src/prefs.js:47

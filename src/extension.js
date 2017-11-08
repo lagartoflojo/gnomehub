@@ -130,9 +130,9 @@ const GithubProjects = new Lang.Class({
     if (error.status === 2 || error.status === 8) {
       this._setStatusMessage(_("No internet connection"));
     } else if (error.status === 403) {
-      this._setStatusMessage(_("GitHub API rate limit exceeded.\nPlease log in in extension settings."));
+      this._setStatusMessage(_("GitHub API rate limit exceeded.\nLog in to GitHub in extension settings to increase the limit."));
     } else if (error.status === 404) {
-      this._setStatusMessage(_("Repository \"%s\" not found.\nIf this is a private repo, please log in in extension settings.").format(error.repoFullName));
+      this._setStatusMessage(_("Repository \"%s\" not found.\nIf this is a private repo, log in to GitHub in extension settings.").format(error.repoFullName));
     } else {
       this._setStatusMessage(error.statusText);
     }
