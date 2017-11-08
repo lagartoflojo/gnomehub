@@ -55,7 +55,7 @@ const GithubProjectsPrefsWidget = new GObject.Class({
     this.add(notebook);
 
     this.add(new Gtk.Label({
-      label: '<span color="#888">GnomeHub v' + Extension.metadata.version + '</span>',
+      label: `<span color="#888">GnomeHub v'${Extension.metadata.version}</span>`,
       use_markup: true,
       xalign: 1
     }));
@@ -76,7 +76,7 @@ const GithubProjectsPrefsWidget = new GObject.Class({
     }));
 
     grid.add(new Gtk.Label({
-      label: "<b>"+_("Username")+"</b>",
+      label: `<b>${_("Username")}</b>`,
       use_markup: true,
       halign: Gtk.Align.START
     }));
@@ -91,8 +91,7 @@ const GithubProjectsPrefsWidget = new GObject.Class({
       Gio.SettingsBindFlags.DEFAULT);
 
     grid.add(new Gtk.Label({
-      label: "<b>"+_("Access token")+"</b> (<a href=\"https://github.com/settings/tokens\">" +
-        _("Create a new access token")+"</a> "+_("if you don’t have one")+")",
+      label: `<b>${_("Access token")}</b>`,
       use_markup: true,
       halign: Gtk.Align.START
     }));
@@ -106,6 +105,18 @@ const GithubProjectsPrefsWidget = new GObject.Class({
 
     this._settings.bind(SETTINGS_GITHUB_PASSWORD, passwordEntry, 'text',
       Gio.SettingsBindFlags.DEFAULT);
+
+    grid.add(new Gtk.Label({
+      label: [
+        '<a href="https://github.com/settings/tokens">',
+        _("Create a new access token"),
+        `</a> ${_("if you don’t have one.")}\n`,
+        _("To only allow access to public repositories, select the <b>public_repo</b> scope.") + '\n',
+        _("To also allow access to private repositories, select the <b>repo</b> scope.")
+      ].join(''),
+      use_markup: true,
+      halign: Gtk.Align.START
+    }));
 
     return grid;
   },
