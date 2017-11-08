@@ -26,8 +26,8 @@ const GithubProjects = new Lang.Class({
   Name: 'GithubProjects',
   Extends: PanelMenu.Button,
 
-  _init: function() {
-    this.parent(0.0, "GitHub Projects");
+  _init: function () {
+    this.parent(0.0, 'GitHub Projects');
     this._settings = Convenience.getSettings();
     this._settings.connect('changed::' + SETTINGS_REPOSITORIES,
       Lang.bind(this, this._initRepos));
@@ -69,19 +69,18 @@ const GithubProjects = new Lang.Class({
       password: this._settings.get_string(SETTINGS_GITHUB_PASSWORD)
     });
     if (this._getRepoNames().length) {
-      this._setStatusMessage(_('Loading repositories...'));
+      this._setStatusMessage(_("Loading repositories..."));
       this._updateRepos(true);
     }
   },
 
   _updateRepos: function (reset) {
     if (reset) {
-      for(let repoName in this._repoMenuItems) {
+      for (let repoName in this._repoMenuItems) {
         this._repoMenuItems[repoName].destroy();
       }
       this._repoMenuItems = {};
     }
-
 
     let repoNames = this._getRepoNames();
 
@@ -89,7 +88,7 @@ const GithubProjects = new Lang.Class({
       this._clearStatusMessage();
 
       let reposByName = {};
-      repos.forEach((repo) => reposByName[repo.repoFullName] = repo);
+      repos.forEach((repo) => { reposByName[repo.repoFullName] = repo; });
 
       repoNames.reverse().forEach((repoName) => this._addRepoMenuItem(reposByName[repoName]));
     }).catch(Lang.bind(this, this._handleError));
@@ -99,7 +98,7 @@ const GithubProjects = new Lang.Class({
 
   _addRepoMenuItem: function (repo) {
     let repoMenuItem = this._repoMenuItems[repo.repoFullName];
-    if(!repoMenuItem) {
+    if (!repoMenuItem) {
       repoMenuItem = new RepoMenuItem(repo);
       this.menu.addMenuItem(repoMenuItem, 0);
       this._repoMenuItems[repo.repoFullName] = repoMenuItem;
@@ -111,7 +110,7 @@ const GithubProjects = new Lang.Class({
   _removeDeletedRepos: function () {
     let repoNames = this._getRepoNames();
     let repoMenuItems = Object.keys(this._repoMenuItems);
-    let removedRepos = repoMenuItems.filter(function(i) { return repoNames.indexOf(i) < 0; });
+    let removedRepos = repoMenuItems.filter(function (i) { return repoNames.indexOf(i) < 0; });
 
     removedRepos.forEach((repo) => {
       this._repoMenuItems[repo].destroy();
@@ -129,15 +128,12 @@ const GithubProjects = new Lang.Class({
     log('ERROR: ' + error)
 
     if (error.status === 2 || error.status === 8) {
-      this._setStatusMessage(_('No internet connection'));
-    }
-    else if (error.status === 403) {
-      this._setStatusMessage(_('Github API rate limit exceeded.\nPlease log in in extension settings.'));
-    }
-    else if (error.status === 404) {
-      this._setStatusMessage(_('Repository "') + error.repoFullName + _('" not found.\nIf this is a private repo, please log in in extension settings.'));
-    }
-    else {
+      this._setStatusMessage(_("No internet connection"));
+    } else if (error.status === 403) {
+      this._setStatusMessage(_("GitHub API rate limit exceeded.\nPlease log in in extension settings."));
+    } else if (error.status === 404) {
+      this._setStatusMessage(_("Repository \"%s\" not found.\nIf this is a private repo, please log in in extension settings.").format(error.repoFullName));
+    } else {
       this._setStatusMessage(error.statusText);
     }
   },
@@ -150,13 +146,13 @@ const GithubProjects = new Lang.Class({
   },
 
   _clearStatusMessage: function () {
-    if(this._statusMessage) {
+    if (this._statusMessage) {
       this._statusMessage.destroy();
       this._statusMessage = null;
     }
   },
 
-  _showSettings: function() {
+  _showSettings: function () {
     Util.spawn(['gnome-shell-extension-prefs', metadata.uuid]);
   },
 
@@ -168,19 +164,19 @@ const GithubProjects = new Lang.Class({
 
 let _githubProjects;
 
-function init(extensionMeta) {
+function init (extensionMeta) {
   let theme = imports.gi.Gtk.IconTheme.get_default();
   theme.append_search_path(extensionMeta.path + '/icons');
   Convenience.initTranslations('gnomehub');
 }
 
-function enable() {
+function enable () {
   log('Enabling GnomeHub...');
   _githubProjects = new GithubProjects();
   Main.panel.addToStatusArea('github-projects', _githubProjects, 0, 'right');
 }
 
-function disable() {
+function disable () {
   if (_githubProjects) {
     log('Disabling GnomeHub...');
     _githubProjects.destroy();
