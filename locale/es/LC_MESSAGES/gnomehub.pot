@@ -1,0 +1,106 @@
+# Spanish translations for GnomeHub package.
+# Copyright (C) 2017 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the GnomeHub package.
+# Hernan Schmidt <hschmidt@suse.com>, 2017.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: GnomeHub\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-08 18:08+0100\n"
+"PO-Revision-Date: 2017-11-08 18:15+0100\n"
+"Last-Translator: Hernan Schmidt <hschmidt@suse.com>\n"
+"Language-Team: Spanish\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/extension.js:55
+msgid "Settings"
+msgstr "Ajustes"
+
+#: src/extension.js:72
+msgid "Loading repositories..."
+msgstr "Cargando repositorios..."
+
+#: src/extension.js:131
+msgid "No internet connection"
+msgstr "Sin conexión a internet"
+
+#: src/extension.js:133
+msgid ""
+"GitHub API rate limit exceeded.\n"
+"Log in to GitHub in extension settings to increase the limit."
+msgstr ""
+"Límite de la API de GitHub excedido.\n"
+"Ingresa a GitHub en los ajustes de la extensión para aumentar el límite."
+
+#: src/extension.js:135
+#, javascript-format
+msgid ""
+"Repository \"%s\" not found.\n"
+"If this is a private repo, log in to GitHub in extension settings."
+msgstr ""
+"No se encontró el repositorio \"%s\".\n"
+"Si es un repositorio privado, ingresa a GitHub en los ajustes de la extensión."
+
+#: src/prefs.js:47
+msgid "Repositories"
+msgstr "Repositorios"
+
+#: src/prefs.js:52
+msgid "GitHub Credentials"
+msgstr "Credenciales de GitHub"
+
+#: src/prefs.js:73
+msgid "To access your private repos, log in to GitHub."
+msgstr "Para acceder a tus repositorios privados, ingresa a GitHub."
+
+#: src/prefs.js:79
+msgid "Username"
+msgstr "Nombre de usuario"
+
+#: src/prefs.js:94
+msgid "Access token"
+msgstr "Identificador de acceso"
+
+#: src/prefs.js:112
+msgid "Create a new access token"
+msgstr "Crea un nuevo identificador de acceso"
+
+#: src/prefs.js:113
+msgid "if you don’t have one."
+msgstr "en caso de no tener uno."
+
+#: src/prefs.js:114
+msgid ""
+"To only allow access to public repositories, select the <b>public_repo</b> "
+"scope."
+msgstr ""
+"Para permitir el acceso sólo a repositorios púbicos, selecciona el campo "
+"<b>public_repo</b>."
+
+#: src/prefs.js:115
+msgid ""
+"To also allow access to private repositories, select the <b>repo</b> scope."
+msgstr ""
+"Para además permitir el acceso a repositorios privados, seleccione el campo "
+"<b>repo</b>."
+
+#: src/prefs.js:139
+msgid "Repository"
+msgstr "Repositorio"
+
+#: src/prefs.js:182
+msgid "Add a GitHub repository"
+msgstr "Agregar un repositorio de GitHub"
+
+#: src/prefs.js:195
+msgid "Format: user/repo"
+msgstr "Formato: usuario/repo"
+
+#: src/repoMenuItem.js:25
+msgid "Open repo in browser"
+msgstr "Abrir repo en el navegador"
