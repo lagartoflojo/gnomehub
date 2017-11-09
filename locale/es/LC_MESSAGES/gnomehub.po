@@ -64,11 +64,11 @@ msgstr "Nombre de usuario"
 
 #: src/prefs.js:94
 msgid "Access token"
-msgstr "Identificador de acceso"
+msgstr "Código de acceso"
 
 #: src/prefs.js:112
 msgid "Create a new access token"
-msgstr "Crea un nuevo identificador de acceso"
+msgstr "Crea un nuevo código de acceso"
 
 #: src/prefs.js:113
 msgid "if you don’t have one."
