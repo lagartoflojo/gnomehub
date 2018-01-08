@@ -108,7 +108,7 @@ const GithubProjectsPrefsWidget = new GObject.Class({
 
     grid.add(new Gtk.Label({
       label: [
-        '<a href="https://github.com/settings/tokens">',
+        '<a href="https://github.com/settings/tokens/new?scopes=repo&amp;description=GnomeHub+Shell+Extension">',
         _("Create a new access token") + '</a> ',
         _("if you don’t have one.") + '\n',
         _("To only allow access to public repositories, select the <b>public_repo</b> scope.") + '\n',
